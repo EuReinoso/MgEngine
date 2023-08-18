@@ -1,30 +1,23 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using MgEngine.Obj;
 
-namespace mgengine.Shape
+namespace MgEngine.Shape
 {
-    public class Rect
-    {
-        public Vector2 pos;
-
-        public int width;
-
-        public int height;
-        
+    public class Rect : Box2D
+    {    
         private Texture2D _texture;
 
         private Color _color;
 
-        public Rect(int x, int y, int width, int height)
+        public Rect(int x, int y, int width, int height) : base(x, y, width, height)
         {
-            this.pos = new Vector2(x, y);
-            this.width = width;
-            this.height = height;
+
         }
 
         public Rectangle GetRectangle()
         {
-            return new Rectangle((int)pos.X, (int)pos.Y, width, height);
+            return new Rectangle(X, Y, Width, Height);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -36,9 +29,9 @@ namespace mgengine.Shape
         {
             _color = color;
 
-            _texture = new Texture2D(graphicsDevice, width, height);
+            _texture = new Texture2D(graphicsDevice, Width, Height);
 
-            Color[] textureData = new Color[width * height];
+            Color[] textureData = new Color[Width * Height];
             for (int i = 0; i < textureData.Length; i++)
             {
                 textureData[i] = color;
