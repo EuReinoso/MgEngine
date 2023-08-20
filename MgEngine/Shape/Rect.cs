@@ -22,7 +22,7 @@ namespace MgEngine.Shape
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, GetRectangle(), _color);
+            spriteBatch.Draw(_texture, Pos, null, _color, Rotation, Center, 1.0f, SpriteEffects.None, 1.0f);            
         }
 
         public void SetColor(GraphicsDevice graphicsDevice, Color color)
@@ -38,6 +38,11 @@ namespace MgEngine.Shape
             }
 
             _texture.SetData(textureData);
+        }
+
+        public void Load(GraphicsDevice graphicsDevice, Color color)
+        {
+            SetColor(graphicsDevice, color);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MgEngine.Interface
 {
@@ -9,5 +10,6 @@ namespace MgEngine.Interface
         public int Y { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        float Rotation { get; set; }
     }
 }

@@ -30,8 +30,7 @@ namespace MgEngine.Shape
             P2 = new Vector2(p2x, p2y);
             Width = width;
         }
-
-        public void SetColor(GraphicsDevice graphicsDevice, Color color)
+        private void SetColor(GraphicsDevice graphicsDevice, Color color)
         {
             _color = color;
 
@@ -46,6 +45,11 @@ namespace MgEngine.Shape
             }
 
             _texture.SetData(textureData);
+        }
+
+        public void Load(GraphicsDevice graphicsDevice, Color color)
+        {
+            SetColor(graphicsDevice, color);
         }
 
         public void Draw(SpriteBatch spriteBatch)
