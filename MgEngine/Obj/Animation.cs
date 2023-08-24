@@ -26,27 +26,32 @@ namespace MgEngine.Obj
             }
         }
 
-        public void Update()
+        public void Update(float dt)
         {
             if (_currentFrameTime >= _frameTimeList[_currentFrameIndex])
             {
                 if (_currentFrameIndex < _frameTimeList.Count() - 1)
                 {
-                    _currentFrameIndex++;
+                    _currentFrameIndex += (int)(1 * dt);
                 }
                 else
                 {
-                    _currentFrameIndex = 0;
-                    _currentFrameTime = 0;
+                    Reset();
                 }
             }
 
             _currentFrameTime++;
         }
 
-        public Rectangle GetCurrentFrame()
+        public void Reset()
         {
-            return _animation[_currentFrameIndex];
+            _currentFrameIndex = 0;
+            _currentFrameTime = 0;
+        }
+
+        public Rectangle CurrentFrame
+        {
+            get { return _animation[_currentFrameIndex]; }
         }
     }
 }

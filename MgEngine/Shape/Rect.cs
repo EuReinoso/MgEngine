@@ -15,9 +15,9 @@ namespace MgEngine.Shape
 
         }
 
-        public Rectangle GetRectangle()
+        public Rectangle Rectangle 
         {
-            return new Rectangle(X, Y, Width, Height);
+            get { return new Rectangle(X, Y, Width, Height); }
         }
 
         public void Draw(SpriteBatch spriteBatch)

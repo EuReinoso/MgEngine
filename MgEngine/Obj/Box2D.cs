@@ -13,7 +13,6 @@ namespace MgEngine.Obj
 
         public Box2D()
         {
-
         }
         public Box2D(int x, int y) 
         {
