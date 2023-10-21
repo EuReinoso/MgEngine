@@ -5,39 +5,60 @@ using System;
 using System.Collections.Generic;
 
 using MgEngine.Shape;
+using MgEngine.Util;
 
 namespace MgEngine.Obj
 {
     public class Obj : Box2D
     {
         private Texture2D _currentTexture;
-
         private Rectangle _currentFrame;
         private AnimationManager _animations;
         private Dictionary<object, Texture2D> _textures;
+        private GraphicsDevice _graphicsDevice;
+        private Surface _surface;
 
         public Obj()
         {
 
         }
 
-
-        public Rect Rect 
-        { 
-            get { return new Rect(X, Y, Width, Height); } 
+        public Rect Rect
+        {
+            get { return new Rect(X, Y, Width, Height); }
         }
-
+            
+        public void LoadGraphicsDevice(GraphicsDevice graphicsDevice)
+        {
+            _graphicsDevice =  graphicsDevice;
+            _surface = new Surface(graphicsDevice);
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (_currentTexture != null)
+            if (_currentTexture == null)
             {
-                spriteBatch.Draw(_currentTexture, Pos, _currentFrame, Color.White, Rotation, Center, 4, SpriteEffects.None, 1);
+                throw new Exception("Attempting to Draw an Obj without Texture");
+            }
+            else if (_graphicsDevice == null)
+            {
+                throw new Exception("Attempting to Draw an Obj without LoadGraphicsDevice");
             }
             else
             {
-                Console.WriteLine("Attempting to Draw an Obj without Texture");
+                RenderTarget2D renderTarget = _surface.DrawTextureOnSurface(_currentTexture, new Rectangle(0, 0, Width, Height), _currentFrame);
+
+                spriteBatch.Draw(renderTarget, Pos, new Rectangle(0, 0, Width, Height), Color.White, Rotation, Center, 1, SpriteEffects.None, 1);
+
+
+                //ToDo: Fazer esse codigo funcionar ao usar resizing
+                //spriteBatch.Draw(_currentTexture, Rect.Rectangle, _currentFrame, Color.White, Rotation, Center, 1, SpriteEffects.None, 1);
             }
+        }
+
+        public void DrawRect(SpriteBatch spriteBatch, Color color)
+        {
+            MgDraw.DrawRect(_graphicsDevice, spriteBatch, Rect, color, Rotation);
         }
 
         #region Animation
@@ -47,6 +68,8 @@ namespace MgEngine.Obj
             {
                 _currentTexture = content.Load<Texture2D>(path);
                 _currentFrame = new Rectangle(0, 0, _currentTexture.Width, _currentTexture.Height);
+                Width = _currentFrame.Width;
+                Height = _currentFrame.Height;
             }
             catch (Exception ex)
             {
@@ -59,16 +82,17 @@ namespace MgEngine.Obj
             _textures = new();
         }
 
+
         public void AddAnimation(Texture2D texture, object actionKey, int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1)
         {
-            if (!_textures.ContainsKey(actionKey))
+            try
             {
                 _textures.Add(actionKey, texture);
                 _animations.AddAnimation(actionKey, frameWidth, frameHeight, frameTimeList, row);
             }
-            else
+            catch (Exception e)
             {
-                Console.WriteLine($"ActionKey `{actionKey}` already exists at this Obj!");
+                throw new Exception(e.Message);
             }
         }
 
@@ -76,6 +100,9 @@ namespace MgEngine.Obj
         {
             _currentTexture = _textures[actionKey];
             _animations.SetAnimation(actionKey);
+            _currentFrame = _animations.CurrentAnimation.CurrentFrame;
+            Width = _currentFrame.Width;
+            Height = _currentFrame.Height;
         }
 
         public void Animate(float dt)
@@ -89,10 +116,9 @@ namespace MgEngine.Obj
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    throw new Exception(e.Message);
                     
                 }
-                
             }
             else
             {

@@ -45,7 +45,7 @@ namespace MgEngine.Obj
 
         public Vector2 Center 
         { 
-            get { return new Vector2(Height / 2, Width / 2); }
+            get { return new Vector2((Width / 2), (Height / 2)); }
         }
 
         

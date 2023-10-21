@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MgEngine.Obj;
+using System.Threading;
+using System;
 
 namespace MgEngine.Shape
 {
@@ -21,23 +23,37 @@ namespace MgEngine.Shape
         }
 
         public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(_texture, Pos, null, _color, Rotation, Center, 1.0f, SpriteEffects.None, 1.0f);            
+        {   
+            if (_texture != null)
+            {
+                spriteBatch.Draw(_texture, Pos, Rectangle, _color, Rotation, Center, 1, SpriteEffects.None, 1);
+            }
+            else
+            {
+                throw new Exception("Attempt to Draw an Rect Without Texture, call Load first.");
+            }
         }
 
         public void SetColor(GraphicsDevice graphicsDevice, Color color)
         {
-            _color = color;
-
-            _texture = new Texture2D(graphicsDevice, Width, Height);
-
-            Color[] textureData = new Color[Width * Height];
-            for (int i = 0; i < textureData.Length; i++)
+            try
             {
-                textureData[i] = color;
-            }
+                _color = color;
 
-            _texture.SetData(textureData);
+                _texture = new Texture2D(graphicsDevice, Width, Height);
+
+                Color[] textureData = new Color[Width * Height];
+                for (int i = 0; i < textureData.Length; i++)
+                {
+                    textureData[i] = color;
+                }
+
+                _texture.SetData(textureData);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public void Load(GraphicsDevice graphicsDevice, Color color)

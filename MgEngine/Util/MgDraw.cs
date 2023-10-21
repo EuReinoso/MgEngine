@@ -4,27 +4,21 @@ using MgEngine.Shape;
 
 namespace MgEngine.Util
 {
-    public class MgDraw
+    public static class MgDraw
     {
-        private GraphicsDevice _graphicsDevice;
 
-        public MgDraw(GraphicsDevice graphicsDevice)
-        {
-            _graphicsDevice = graphicsDevice;
-        }
-
-        public void DrawRect(SpriteBatch spriteBatch, Rect rect, Color color, float rotation = 0)
+        public static void DrawRect(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Rect rect, Color color, float rotation = 0)
         {
             rect.Rotation = rotation;
 
-            rect.Load(_graphicsDevice, color);
+            rect.Load(graphicsDevice, color);
 
             rect.Draw(spriteBatch);
         }
 
-        public void DrawLine(SpriteBatch spriteBatch, Line line, Color color)
+        public static void DrawLine(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Line line, Color color)
         {
-            line.Load(_graphicsDevice, color);
+            line.Load(graphicsDevice, color);
 
             line.Draw(spriteBatch);
         }
