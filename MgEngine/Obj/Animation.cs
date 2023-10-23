@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
-
+using System;
 
 namespace MgEngine.Obj
 {
@@ -30,11 +30,9 @@ namespace MgEngine.Obj
         {
             if (_currentFrameTime >= _frameTimeList[_currentFrameIndex])
             {
-                if (_currentFrameIndex < _frameTimeList.Count() - 1)
-                {
-                    _currentFrameIndex += (int)(1 * dt);
-                }
-                else
+                _currentFrameIndex += (int)Math.Round(1  *  dt);
+
+                if (_currentFrameIndex > _frameTimeList.Count() - 1)
                 {
                     Reset();
                 }
