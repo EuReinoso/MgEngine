@@ -17,6 +17,7 @@ namespace MgEngine.Obj
         private Dictionary<object, Texture2D> _textures;
         private GraphicsDevice _graphicsDevice;
         private Surface _surface;
+        private RenderTarget2D _destinationRenderTarget;
 
         public Obj()
         {
@@ -28,10 +29,11 @@ namespace MgEngine.Obj
             get { return new Rect(X, Y, Width, Height); }
         }
             
-        public void LoadGraphicsDevice(GraphicsDevice graphicsDevice)
+        public void LoadGraphicsDevice(GraphicsDevice graphicsDevice, RenderTarget2D destinationRenderTarget)
         {
             _graphicsDevice =  graphicsDevice;
             _surface = new Surface(graphicsDevice);
+            _destinationRenderTarget = destinationRenderTarget;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -48,11 +50,13 @@ namespace MgEngine.Obj
             {
                 RenderTarget2D renderTarget = _surface.DrawTextureOnSurface(_currentTexture, new Rectangle(0, 0, Width, Height), _currentFrame);
 
+                _graphicsDevice.SetRenderTarget(_destinationRenderTarget);
+
                 spriteBatch.Draw(renderTarget, Pos, new Rectangle(0, 0, Width, Height), Color.White, Rotation, Center, 1, SpriteEffects.None, 1);
 
-
                 //ToDo: Fazer esse codigo funcionar ao usar resizing
-                //spriteBatch.Draw(_currentTexture, Rect.Rectangle, _currentFrame, Color.White, Rotation, Center, 1, SpriteEffects.None, 1);
+                //spriteBatch.Draw(_currentTexture, Rect.Rectangle, _currentFrame, Color.White, Rotation, Center, SpriteEffects.None, 1);
+          
             }
         }
 

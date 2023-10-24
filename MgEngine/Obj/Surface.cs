@@ -27,8 +27,6 @@ namespace MgEngine.Obj
             _spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, Color.White);
             _spriteBatch.End();
 
-            _graphicsDevice.SetRenderTarget(null);
-
             return renderTarget;
         }
 
