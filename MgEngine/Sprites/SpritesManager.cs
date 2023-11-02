@@ -75,6 +75,30 @@ namespace MgEngine.Sprites
                     2);
             }
         }
+
+        public void DrawLine(Line line, Color color)
+        {
+            VertexPositionColor[] vertices = new VertexPositionColor[4];
+
+            vertices[0] = new VertexPositionColor(new Vector3(line.Vertices[0], 0f), color);
+            vertices[1] = new VertexPositionColor(new Vector3(line.Vertices[1], 0f), color);
+            vertices[2] = new VertexPositionColor(new Vector3(line.Vertices[2], 0f), color);
+            vertices[3] = new VertexPositionColor(new Vector3(line.Vertices[3], 0f), color);
+
+            foreach (EffectPass pass in _effects.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                _graphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
+                    PrimitiveType.TriangleList,
+                    vertices,
+                    0,
+                    4,
+                    rectIndexes,
+                    0,
+                    2);
+            }
+        }
         #endregion
 
         public void SetMainRenderTarget()

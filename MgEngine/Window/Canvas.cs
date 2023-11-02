@@ -27,6 +27,12 @@ namespace MgEngine.Window
 
         public RenderTarget2D RenderTarget { get { return _renderTarget; } }
 
+        public void SetResolution(int width, int height)
+        {
+            _renderTarget = new(_graphicsDevice, width, height);
+            SetDestinationRectangle();
+        }
+
         public void SetDestinationRectangle()
         {
             var windowSize = _graphicsDevice.PresentationParameters.Bounds;
@@ -60,5 +66,11 @@ namespace MgEngine.Window
             spriteBatch.End();
 
         }
+
+        public void Clear(Color color)
+        {
+            _graphicsDevice.Clear(color);
+        }
+
     }
 }
