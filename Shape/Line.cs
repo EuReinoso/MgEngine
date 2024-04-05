@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -12,16 +12,16 @@ namespace MgEngine.Shape
         private Vector2 _p1;
         private Vector2 _p2;
         public int Width;
-        
+
         private Vector2[] _vertices;
 
         #region Properties
-        public Vector2 P1 
+        public Vector2 P1
         {
-            get { return _p1;}
+            get { return _p1; }
 
-            set 
-            { 
+            set
+            {
                 _p1 = value;
                 CalculateVertices();
             }

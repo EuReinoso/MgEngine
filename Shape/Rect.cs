@@ -1,13 +1,13 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using MgEngine.Entity;
 using Microsoft.Xna.Framework;
-using MgEngine.Obj;
-using System.Threading;
+using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Threading;
 
 namespace MgEngine.Shape
 {
     public class Rect : Box2D
-    {    
+    {
 
         private Vector2[] _vertices;
 
@@ -29,8 +29,8 @@ namespace MgEngine.Shape
         {
             get { return (int)Pos.X; }
 
-            set 
-            { 
+            set
+            {
                 Pos = new Vector2(value, Pos.Y);
                 CalculateVertices();
             }
@@ -41,14 +41,14 @@ namespace MgEngine.Shape
         {
             get { return (int)Pos.Y; }
 
-            set 
-            { 
+            set
+            {
                 Pos = new Vector2(Pos.X, value);
                 CalculateVertices();
             }
         }
 
-        public new int Width 
+        public new int Width
         {
             get { return base.Width; }
 

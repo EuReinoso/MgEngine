@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 
-namespace MgEngine.Obj
+namespace MgEngine.Entity
 {
     public class AnimationManager
     {
@@ -16,13 +16,13 @@ namespace MgEngine.Obj
         }
 
         public void AddAnimation(object actionKey, int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1)
-        {   
+        {
             if (_animations.ContainsKey(actionKey))
             {
                 throw new Exception($"ActionKey `{actionKey}` already exists at this Obj!");
             }
 
-            if(_animations.Count <= 0)
+            if (_animations.Count <= 0)
             {
                 _currentAnimationKey = actionKey;
             }
@@ -50,7 +50,7 @@ namespace MgEngine.Obj
 
         public Animation CurrentAnimation
         {
-            get{ return _animations[_currentAnimationKey]; }
+            get { return _animations[_currentAnimationKey]; }
         }
     }
 }

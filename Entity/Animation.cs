@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
-namespace MgEngine.Obj
+namespace MgEngine.Entity
 {
     public class Animation
     {
@@ -30,7 +30,7 @@ namespace MgEngine.Obj
         {
             if (_currentFrameTime >= _frameTimeList[_currentFrameIndex])
             {
-                _currentFrameIndex += (int)Math.Round(1  *  dt);
+                _currentFrameIndex += (int)Math.Round(1 * dt);
 
                 if (_currentFrameIndex > _frameTimeList.Count() - 1)
                 {

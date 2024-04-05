@@ -18,7 +18,7 @@ namespace MgEngine.Time
         private int _fps;
         private float _fpsUpdateTicks;
         private int _fpsLimit = 60;
-            
+
         public Clock(Game game)
         {
             _game = game;
@@ -43,7 +43,7 @@ namespace MgEngine.Time
 
             set { _game.IsFixedTimeStep = value; }
         }
-        
+
 
         public int FpsLimit
         {

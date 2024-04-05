@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using MgEngine.Interface;
 using Microsoft.Xna.Framework;
-using MgEngine.Interface;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace MgEngine.Obj
+namespace MgEngine.Entity
 {
     public class Box2D : IBox2D
     {
@@ -14,17 +14,17 @@ namespace MgEngine.Obj
         public Box2D()
         {
         }
-        public Box2D(int x, int y) 
+        public Box2D(int x, int y)
         {
             X = x;
             Y = y;
         }
 
-        public Box2D(int x, int y,  int width, int height)
+        public Box2D(int x, int y, int width, int height)
         {
             X = x;
             Y = y;
-            Width = width; 
+            Width = width;
             Height = height;
         }
 
@@ -36,20 +36,20 @@ namespace MgEngine.Obj
             set { Pos = new Vector2(value, Pos.Y); }
         }
 
-        public int Y 
+        public int Y
         {
             get { return (int)Pos.Y; }
 
             set { Pos = new Vector2(Pos.X, value); }
         }
 
-        public Vector2 Center 
-        { 
+        public Vector2 Center
+        {
             get { return new Vector2((Width / 2), (Height / 2)); }
         }
 
-        
+
     }
 
-    
+
 }

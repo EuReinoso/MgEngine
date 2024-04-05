@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -32,7 +32,7 @@ namespace MgEngine.Font
 
         public void DrawText(SpriteBatch spriteBatch, string text, Vector2 Pos, Color color, string fontName = null, float rotation = 0)
         {
-            if (_fonts.Count <= 0 )
+            if (_fonts.Count <= 0)
             {
                 throw new Exception("Attempting to Draw an font without AddFont!");
             }
@@ -49,7 +49,7 @@ namespace MgEngine.Font
                 }
             }
 
-            spriteBatch.DrawString(_fonts[fontName], text, Pos, color , rotation, new Vector2(0, 0), 1, SpriteEffects.None, 1);
+            spriteBatch.DrawString(_fonts[fontName], text, Pos, color, rotation, new Vector2(0, 0), 1, SpriteEffects.None, 1);
         }
 
         public void SetDefaultFont(string fontName)

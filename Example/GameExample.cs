@@ -1,11 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MgEngine.Font;
+using MgEngine.Sprites;
+using MgEngine.Time;
+using MgEngine.Window;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-using MgEngine.Window;
-using MgEngine.Font;
-using MgEngine.Time;
-using MgEngine.Sprites;
 
 namespace GameExample
 {

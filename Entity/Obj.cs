@@ -1,13 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using MgEngine.Shape;
+using MgEngine.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-using MgEngine.Sprites;
-using MgEngine.Shape;
-
-namespace MgEngine.Obj
+namespace MgEngine.Entity
 {
     public class Obj : Box2D
     {
@@ -22,7 +21,7 @@ namespace MgEngine.Obj
         {
             _sprites = sprites;
             _surface = new Surface(sprites.GraphicsDevice);
-            
+
             if (animated)
             {
                 InitAnimation();
@@ -33,7 +32,7 @@ namespace MgEngine.Obj
         {
             get { return new Rect(X, Y, Width, Height); }
         }
-            
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (_currentTexture == null)
@@ -53,7 +52,7 @@ namespace MgEngine.Obj
 
         public void DrawRect(Color color)
         {
-           _sprites.DrawRect(Rect, color);
+            _sprites.DrawRect(Rect, color);
         }
 
         #region Animation
@@ -112,7 +111,7 @@ namespace MgEngine.Obj
                 catch (Exception e)
                 {
                     throw new Exception(e.Message);
-                    
+
                 }
             }
             else

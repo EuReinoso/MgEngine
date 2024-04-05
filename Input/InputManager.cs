@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArvoreFractal.MgEngine.Input
+namespace MgEngine.Input
 {
     public class InputManager
     {
         private KeyboardState _keyState;
         private KeyboardState _lastKeyState;
 
-        public InputManager() 
-        { 
+        public InputManager()
+        {
         }
         public void Update(KeyboardState keyState)
         {

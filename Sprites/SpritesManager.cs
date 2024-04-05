@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using MgEngine.Shape;
+﻿using MgEngine.Shape;
 using MgEngine.Window;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MgEngine.Sprites
 {
@@ -12,7 +12,7 @@ namespace MgEngine.Sprites
         private BasicEffect _effects;
         private RenderTarget2D _mainRenderTarget;
 
-        public SpritesManager(GraphicsDevice graphicsDevice, WindowManager window) 
+        public SpritesManager(GraphicsDevice graphicsDevice, WindowManager window)
         {
             _graphicsDevice = graphicsDevice;
             _mainRenderTarget = window.Canvas.RenderTarget;
@@ -66,8 +66,8 @@ namespace MgEngine.Sprites
                 pass.Apply();
 
                 _graphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
-                    PrimitiveType.TriangleList, 
-                    vertices, 
+                    PrimitiveType.TriangleList,
+                    vertices,
                     0,
                     4,
                     rectIndexes,
