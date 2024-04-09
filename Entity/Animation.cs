@@ -14,16 +14,12 @@ namespace MgEngine.Entity
         private int _currentFrameIndex;
         private int _currentFrameTime;
 
-
         public Animation(int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1)
         {
             _frameTimeList = frameTimeList;
 
             for (int i = 0; i < frameTimeList.Count(); i++)
-            {
                 _animation.Add(new Rectangle(i * frameWidth, (row - 1) * frameHeight, frameWidth, frameHeight));
-
-            }
         }
 
         public void Update(float dt)
@@ -33,9 +29,7 @@ namespace MgEngine.Entity
                 _currentFrameIndex += (int)Math.Round(1 * dt);
 
                 if (_currentFrameIndex > _frameTimeList.Count() - 1)
-                {
                     Reset();
-                }
             }
 
             _currentFrameTime++;

@@ -18,14 +18,10 @@ namespace MgEngine.Entity
         public void AddAnimation(object actionKey, int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1)
         {
             if (_animations.ContainsKey(actionKey))
-            {
                 throw new Exception($"ActionKey `{actionKey}` already exists at this Obj!");
-            }
 
             if (_animations.Count <= 0)
-            {
                 _currentAnimationKey = actionKey;
-            }
 
             _animations.Add(actionKey, new Animation(frameWidth, frameHeight, frameTimeList, row));
         }
@@ -37,15 +33,11 @@ namespace MgEngine.Entity
 
         public void SetAnimation(object actionKey)
         {
-            if (_animations.ContainsKey(actionKey))
-            {
-                _animations[_currentAnimationKey].Reset();
-                _currentAnimationKey = actionKey;
-            }
-            else
-            {
-                Console.WriteLine($"Animation Key {actionKey} does not exists!");
-            }
+            if (!_animations.ContainsKey(actionKey))
+                return;
+
+            _animations[_currentAnimationKey].Reset();
+            _currentAnimationKey = actionKey;
         }
 
         public Animation CurrentAnimation
