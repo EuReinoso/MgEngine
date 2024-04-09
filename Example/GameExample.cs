@@ -12,10 +12,10 @@ namespace GameExample
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private WindowManager _window;
-        private FontManager _font;
+        private Window _window;
+        private Font _font;
         private Clock _clock;
-        private SpritesManager _sprites;
+        private SpritesDraw _sprites;
 
         public GameExample()
         {
@@ -33,9 +33,7 @@ namespace GameExample
 
             _sprites = new(GraphicsDevice, _window);
 
-            _font = new(Content, "Font/");
-            _font.AddFont("Default");
-            _font.SetDefaultFont("Default");
+            _font = new(Content, "Font");
 
             _clock.IsFpsLimited = false;
             //_clock.FpsLimit = 60;

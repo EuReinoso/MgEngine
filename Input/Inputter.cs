@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace MgEngine.Input
 {
-    public class InputManager
+    public class Inputter
     {
         private KeyboardState _keyState;
         private KeyboardState _lastKeyState;
 
-        public InputManager()
+        public Inputter()
         {
         }
+
         public void Update(KeyboardState keyState)
         {
             _lastKeyState = _keyState;

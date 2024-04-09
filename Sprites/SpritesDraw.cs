@@ -5,14 +5,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MgEngine.Sprites
 {
-    public class SpritesManager
+    public class SpritesDraw
     {
         private GraphicsDevice _graphicsDevice;
         private int[] rectIndexes;
         private BasicEffect _effects;
         private RenderTarget2D _mainRenderTarget;
 
-        public SpritesManager(GraphicsDevice graphicsDevice, WindowManager window)
+        public SpritesDraw(GraphicsDevice graphicsDevice, WindowManager window)
         {
             _graphicsDevice = graphicsDevice;
             _mainRenderTarget = window.Canvas.RenderTarget;

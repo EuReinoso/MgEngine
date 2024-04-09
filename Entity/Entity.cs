@@ -10,13 +10,13 @@ namespace MgEngine.Entity
 {
     public class Entity : Box2D
     {
-        private SpritesManager _sprites;
+        private SpritesDraw _sprites;
         private Surface _surface;
 
         protected Texture2D _texture;
         protected Rectangle _sourceRectangle;
 
-        public Entity(SpritesManager sprites, Texture2D texture)
+        public Entity(SpritesDraw sprites, Texture2D texture)
         {
             _sprites = sprites;
             _surface = new Surface(sprites.GraphicsDevice);

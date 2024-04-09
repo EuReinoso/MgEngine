@@ -15,7 +15,7 @@ namespace MgEngine.Entity
         private AnimationManager _animations;
         private Dictionary<object, Texture2D> _textures;
 
-        public EntityAnimated(SpritesManager sprites, Texture2D texture) : base(sprites, texture)
+        public EntityAnimated(SpritesDraw sprites, Texture2D texture) : base(sprites, texture)
         {
             _animations = new();
             _textures = new();

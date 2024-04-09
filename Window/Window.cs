@@ -3,12 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MgEngine.Window
 {
-    public class WindowManager
+    public class Window
     {
         private GraphicsDeviceManager _graphics;
         private Canvas _canvas;
 
-        public WindowManager(GraphicsDeviceManager graphics, int canvasWidth = 1280, int canvasHeight = 720)
+        public Window(GraphicsDeviceManager graphics, int canvasWidth = 1280, int canvasHeight = 720)
         {
             _graphics = graphics;
             _canvas = new(_graphics.GraphicsDevice, canvasWidth, canvasHeight);

@@ -80,7 +80,6 @@ namespace MgEngine.Time
             _dt = (float)(gameTime.ElapsedGameTime.TotalSeconds * 60);
         }
 
-
         public int DtInt(float amount)
         {
             return (int)(amount * Dt);
