@@ -1,4 +1,5 @@
 ﻿using MgEngine.Interface;
+using MgEngine.Shape;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,6 +15,7 @@ namespace MgEngine.Entity
         public Box2D()
         {
         }
+
         public Box2D(int x, int y)
         {
             X = x;
@@ -48,6 +50,10 @@ namespace MgEngine.Entity
             get { return new Vector2((Width / 2), (Height / 2)); }
         }
 
+        public Rect Rect
+        {
+            get { return new Rect(X, Y, Width, Height); }
+        }
 
     }
 
