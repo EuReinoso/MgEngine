@@ -1,10 +1,12 @@
-﻿using MgEngine.Font;
+﻿using MgEngine.Scene;
+using MgEngine.Font;
 using MgEngine.Sprites;
 using MgEngine.Time;
 using MgEngine.Window;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MgEngine.Input;
 
 namespace GameExample
 {
@@ -16,6 +18,8 @@ namespace GameExample
         private Font _font;
         private Clock _clock;
         private SpritesDraw _sprites;
+        private MainScene _scene;
+        private Inputter _inputter;
 
         public GameExample()
         {
@@ -23,11 +27,11 @@ namespace GameExample
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             _clock = new(this);
+            _inputter = new();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             _window = new(_graphics, 1920, 1080);
             _window.SetResolution(1920, 1080);
 
@@ -38,6 +42,8 @@ namespace GameExample
             _clock.IsFpsLimited = false;
             //_clock.FpsLimit = 60;
 
+            _scene.Initialize();
+
             base.Initialize();
         }
 
@@ -45,7 +51,7 @@ namespace GameExample
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            _scene.LoadContent(_sprites, Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -53,8 +59,11 @@ namespace GameExample
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            _inputter.Update(Keyboard.GetState());
+
             _clock.Update(gameTime);
+
+            _scene.Update(_clock.Dt, _inputter);
 
             base.Update(gameTime);
         }
@@ -64,7 +73,7 @@ namespace GameExample
             _window.Canvas.Activate();
             _spriteBatch.Begin();
 
-            // TODO: Add your drawing code here
+            _scene.Draw(_spriteBatch);
 
             _font.DrawText(_spriteBatch, _clock.Fps.ToString(), new(10, 10), Color.White);
 
