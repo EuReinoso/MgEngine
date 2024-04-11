@@ -1,5 +1,4 @@
 ﻿using MgEngine.Shape;
-using MgEngine.Window;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,27 +6,33 @@ namespace MgEngine.Sprites
 {
     public class SpritesDraw
     {
+        #region Variables
         private GraphicsDevice _graphicsDevice;
         private int[] rectIndexes;
         private BasicEffect _effects;
         private RenderTarget2D _mainRenderTarget;
-
-        public SpritesDraw(GraphicsDevice graphicsDevice, WindowManager window)
-        {
-            _graphicsDevice = graphicsDevice;
-            _mainRenderTarget = window.Canvas.RenderTarget;
-            LoadEffects();
-            LoadRectIndexes();
-        }
+        #endregion
 
         #region Properties
         public GraphicsDevice GraphicsDevice { get { return _graphicsDevice; } }
         #endregion
 
+        #region Constructor
+        public SpritesDraw(GraphicsDevice graphicsDevice, Window.Window window)
+        {
+            _graphicsDevice = graphicsDevice;
+            _mainRenderTarget = window.Canvas.RenderTarget;
+            _effects = new(_graphicsDevice);
+            rectIndexes = new int[6];
+
+            LoadEffects();
+            LoadRectIndexes();
+        }
+        #endregion
+
         #region Loading
         private void LoadEffects()
         {
-            _effects = new(_graphicsDevice);
             _effects.Alpha = 1.0f;
             _effects.VertexColorEnabled = true;
             _effects.TextureEnabled = false;
@@ -40,8 +45,6 @@ namespace MgEngine.Sprites
 
         private void LoadRectIndexes()
         {
-            rectIndexes = new int[6];
-
             rectIndexes[0] = 0;
             rectIndexes[1] = 1;
             rectIndexes[2] = 2;
@@ -99,11 +102,13 @@ namespace MgEngine.Sprites
                     2);
             }
         }
-        #endregion
 
         public void SetMainRenderTarget()
         {
             _graphicsDevice.SetRenderTarget(_mainRenderTarget);
         }
+
+        #endregion
+
     }
 }

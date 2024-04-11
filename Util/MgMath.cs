@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
-
+﻿
 namespace MgEngine.Util
 {
     public static class MgMath
