@@ -1,13 +1,12 @@
-﻿using MgEngine.Sprites;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace MgEngine.Entity
+namespace MgEngine.Component
 {
     public class EntityAnimated : Entity
     {
         Animator _animator;
 
-        public EntityAnimated(SpritesDraw sprites, Animator animator) : base(sprites, new Texture2D(sprites.GraphicsDevice, 1, 1))
+        public EntityAnimated(Animator animator) : base()
         {
             _animator = animator;
         }

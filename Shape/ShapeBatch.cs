@@ -1,17 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MgEngine.Shape;
 using MgEngine.Screen;
 
-namespace MgEngine.Sprites
+namespace MgEngine.Shape
 {
-    public class SpritesDraw
+    public class ShapeBatch
     {
         #region Variables
         private GraphicsDevice _graphicsDevice;
-        private int[] rectIndexes;
+        private int[] _rectIndexes;
         private BasicEffect _effects;
-        private RenderTarget2D _mainRenderTarget;
+        private Window _window;
+
         #endregion
 
         #region Properties
@@ -19,12 +19,12 @@ namespace MgEngine.Sprites
         #endregion
 
         #region Constructor
-        public SpritesDraw(GraphicsDevice graphicsDevice, Window window)
+        public ShapeBatch(GraphicsDevice graphicsDevice, Window window)
         {
             _graphicsDevice = graphicsDevice;
-            _mainRenderTarget = window.GetRenderTarget();
             _effects = new(_graphicsDevice);
-            rectIndexes = new int[6];
+            _rectIndexes = new int[6];
+            _window = window;
 
             LoadEffects();
             LoadRectIndexes();
@@ -41,23 +41,29 @@ namespace MgEngine.Sprites
             _effects.World = Matrix.Identity;
             _effects.View = Matrix.Identity;
             _effects.Projection = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, 1f);
-
         }
 
         private void LoadRectIndexes()
         {
-            rectIndexes[0] = 0;
-            rectIndexes[1] = 1;
-            rectIndexes[2] = 2;
-            rectIndexes[3] = 0;
-            rectIndexes[4] = 2;
-            rectIndexes[5] = 3;
+            _rectIndexes[0] = 0;
+            _rectIndexes[1] = 1;
+            _rectIndexes[2] = 2;
+            _rectIndexes[3] = 0;
+            _rectIndexes[4] = 2;
+            _rectIndexes[5] = 3;
         }
         #endregion
+
+        private void ReloadProjection()
+        {
+            _effects.Projection = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, 1f);
+        }
 
         #region Draw
         public void DrawRect(Rect rect, Color color)
         {
+            ReloadProjection();
+
             VertexPositionColor[] vertices = new VertexPositionColor[4];
 
             vertices[0] = new VertexPositionColor(new Vector3(rect.Vertices[0], 0f), color);
@@ -69,12 +75,12 @@ namespace MgEngine.Sprites
             {
                 pass.Apply();
 
-                _graphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
+                _graphicsDevice.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList,
                     vertices,
                     0,
                     4,
-                    rectIndexes,
+                    _rectIndexes,
                     0,
                     2);
             }
@@ -82,6 +88,8 @@ namespace MgEngine.Sprites
 
         public void DrawLine(Line line, Color color)
         {
+            ReloadProjection();
+
             VertexPositionColor[] vertices = new VertexPositionColor[4];
 
             vertices[0] = new VertexPositionColor(new Vector3(line.Vertices[0], 0f), color);
@@ -93,20 +101,15 @@ namespace MgEngine.Sprites
             {
                 pass.Apply();
 
-                _graphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
+                _graphicsDevice.DrawUserIndexedPrimitives(
                     PrimitiveType.TriangleList,
                     vertices,
                     0,
                     4,
-                    rectIndexes,
+                    _rectIndexes,
                     0,
                     2);
             }
-        }
-
-        public void SetMainRenderTarget()
-        {
-            _graphicsDevice.SetRenderTarget(_mainRenderTarget);
         }
 
         #endregion

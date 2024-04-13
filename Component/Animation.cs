@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MgEngine.Entity
+namespace MgEngine.Component
 {
     public class Animation
     {

@@ -2,25 +2,32 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MgEngine.Scene;
-using MgEngine.Sprites;
 using MgEngine.Input;
 using MgEngine.Time;
+using MgEngine.Shape;
 
 namespace GameExample
 {
     public class MainScene : Scene
     {
+        #region Variables
+
+        #endregion
+
+        #region Constructor
         public MainScene() : base()
         { 
 
         }
+        #endregion
 
+        #region Loop
         public override void Initialize()
         {
 
         }
 
-        public override void LoadContent(SpritesDraw sprites, ContentManager content)
+        public override void LoadContent(ContentManager content)
         {
 
         }
@@ -30,10 +37,15 @@ namespace GameExample
 
         }
         
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, ShapeBatch sprites)
         {
 
         }
+        #endregion
+
+        #region Methods
+
+        #endregion
 
     }
 }

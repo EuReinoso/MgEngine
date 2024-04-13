@@ -8,7 +8,7 @@ namespace MgEngine.Screen
         private GraphicsDeviceManager _graphics;
         private Canvas _canvas;
         private SpriteBatch _spriteBatch;
-        
+
         public Window(GraphicsDeviceManager graphics, SpriteBatch spriteBatch,int canvasWidth = 768, int canvasHeight = 480)
         {
             _graphics = graphics;
@@ -44,7 +44,7 @@ namespace MgEngine.Screen
             _canvas.SetDestinationRectangle();
         }
 
-        public void Begin(SpriteSortMode spriteSortMode = SpriteSortMode.BackToFront, BlendState? blendState = null, SamplerState? samplerState = null)
+        public void Begin(SpriteSortMode spriteSortMode = SpriteSortMode.Deferred, BlendState? blendState = null, SamplerState? samplerState = null)
         {
             blendState = blendState ?? BlendState.AlphaBlend;
             samplerState = samplerState ?? SamplerState.PointClamp;
@@ -53,12 +53,14 @@ namespace MgEngine.Screen
             _spriteBatch.Begin(spriteSortMode, blendState, samplerState);
         }
 
-        public void End(SpriteSortMode spriteSortMode = SpriteSortMode.BackToFront, BlendState? blendState = null, SamplerState? samplerState = null)
+        public void End(SpriteSortMode spriteSortMode = SpriteSortMode.Deferred, BlendState? blendState = null, SamplerState? samplerState = null)
         {
             blendState = blendState ?? BlendState.AlphaBlend;
             samplerState = samplerState ?? SamplerState.PointClamp;
 
             _spriteBatch.End();
+            _canvas.Dispose();
+
             _canvas.Draw(_spriteBatch, spriteSortMode, blendState, samplerState);
         }
         #endregion

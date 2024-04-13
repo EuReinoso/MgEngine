@@ -1,6 +1,8 @@
 ﻿
 
-namespace MgEngine.Entity
+using MgEngine.Component;
+
+namespace MgEngine.Component
 {
     public class AnimationManager
     {

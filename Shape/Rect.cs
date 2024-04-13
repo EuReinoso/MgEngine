@@ -1,4 +1,4 @@
-﻿using MgEngine.Entity;
+﻿using MgEngine.Component;
 using Microsoft.Xna.Framework;
 
 namespace MgEngine.Shape
@@ -9,6 +9,12 @@ namespace MgEngine.Shape
         private Vector2[] _vertices;
 
         public Rect(int x, int y, int width, int height) : base(x, y, width, height)
+        {
+            _vertices = new Vector2[4];
+            CalculateVertices();
+        }
+
+        public Rect(Rectangle rectangle) : base(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)
         {
             _vertices = new Vector2[4];
             CalculateVertices();

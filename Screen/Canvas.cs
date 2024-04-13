@@ -52,15 +52,17 @@ namespace MgEngine.Screen
             _graphicsDevice.Clear(Color.Black);
         }
 
-        public void Draw(SpriteBatch spriteBatch, SpriteSortMode spriteSortMode = SpriteSortMode.BackToFront, BlendState? blendState = null, SamplerState? samplerState = null)
+        public void Dispose()
         {
             _graphicsDevice.SetRenderTarget(null);
             _graphicsDevice.Clear(new Color(5, 5, 5));
+        }
 
-            spriteBatch.Begin(spriteSortMode, blendState, samplerState);
+        public void Draw(SpriteBatch spriteBatch, SpriteSortMode spriteSortMode = SpriteSortMode.BackToFront, BlendState? blendState = null, SamplerState? samplerState = null, BasicEffect? effects = null)
+        {
+            spriteBatch.Begin(spriteSortMode, blendState, samplerState, effect : effects);
             spriteBatch.Draw(_renderTarget, _destinationRectangle, Color.White);
             spriteBatch.End();
-
         }
 
     }

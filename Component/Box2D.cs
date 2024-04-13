@@ -2,7 +2,7 @@
 using MgEngine.Shape;
 using Microsoft.Xna.Framework;
 
-namespace MgEngine.Entity
+namespace MgEngine.Component
 {
     public class Box2D : IBox2D
     {

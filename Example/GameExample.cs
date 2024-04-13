@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Input;
 using MgEngine.Input;
 using MgEngine.Scene;
 using MgEngine.Font;
-using MgEngine.Sprites;
 using MgEngine.Time;
 using MgEngine.Screen;
+using MgEngine.Shape;
 
 namespace GameExample
 {
@@ -17,7 +17,7 @@ namespace GameExample
         private Window _window;
         private Font _font;
         private Clock _clock;
-        private SpritesDraw _sprites;
+        private ShapeBatch _shapeBatch;
         private MainScene _scene;
         private Inputter _inputter;
 
@@ -34,7 +34,9 @@ namespace GameExample
         {
             _window = new(_graphics, _spriteBatch);
 
-            _sprites = new(GraphicsDevice, _window);
+            _shapeBatch = new(GraphicsDevice, _window);
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _font = new(Content, "Font/monogram", new() { 8, 9, 10, 11, 12, 13, 14, 15 });
 
@@ -48,9 +50,7 @@ namespace GameExample
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            _scene.LoadContent(_sprites, Content);
+            _scene.LoadContent(Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,7 +71,7 @@ namespace GameExample
         {
             _window.Begin();
 
-            _scene.Draw(_spriteBatch);
+            _scene.Draw(_spriteBatch, _shapeBatch);
 
             _font.DrawText(_spriteBatch, "FPS: " + _clock.Fps.ToString(), new Vector2(10, 10), 11, Color.White);
 
