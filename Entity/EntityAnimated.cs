@@ -1,7 +1,6 @@
 ﻿using MgEngine.Sprites;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace MgEngine.Entity
 {
     public class EntityAnimated : Entity

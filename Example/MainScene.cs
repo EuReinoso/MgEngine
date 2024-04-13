@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using MgEngine.Scene;
 using MgEngine.Sprites;
 using MgEngine.Input;
+using MgEngine.Time;
 
 namespace GameExample
 {

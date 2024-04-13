@@ -1,6 +1,7 @@
-﻿using MgEngine.Shape;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MgEngine.Shape;
+using MgEngine.Screen;
 
 namespace MgEngine.Sprites
 {
@@ -18,10 +19,10 @@ namespace MgEngine.Sprites
         #endregion
 
         #region Constructor
-        public SpritesDraw(GraphicsDevice graphicsDevice, Window.Window window)
+        public SpritesDraw(GraphicsDevice graphicsDevice, Window window)
         {
             _graphicsDevice = graphicsDevice;
-            _mainRenderTarget = window.Canvas.RenderTarget;
+            _mainRenderTarget = window.GetRenderTarget();
             _effects = new(_graphicsDevice);
             rectIndexes = new int[6];
 

@@ -1,12 +1,12 @@
-﻿using MgEngine.Scene;
-using MgEngine.Font;
-using MgEngine.Sprites;
-using MgEngine.Time;
-using MgEngine.Window;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MgEngine.Input;
+using MgEngine.Scene;
+using MgEngine.Font;
+using MgEngine.Sprites;
+using MgEngine.Time;
+using MgEngine.Screen;
 
 namespace GameExample
 {
@@ -32,12 +32,11 @@ namespace GameExample
 
         protected override void Initialize()
         {
-            _window = new(_graphics, 1920, 1080);
-            _window.SetResolution(1920, 1080);
+            _window = new(_graphics, _spriteBatch);
 
             _sprites = new(GraphicsDevice, _window);
 
-            _font = new(Content, "Font");
+            _font = new(Content, "Font/monogram", new() { 8, 9, 10, 11, 12, 13, 14, 15 });
 
             _clock.IsFpsLimited = false;
             //_clock.FpsLimit = 60;
@@ -70,15 +69,13 @@ namespace GameExample
 
         protected override void Draw(GameTime gameTime)
         {
-            _window.Canvas.Activate();
-            _spriteBatch.Begin();
+            _window.Begin();
 
             _scene.Draw(_spriteBatch);
 
-            _font.DrawText(_spriteBatch, _clock.Fps.ToString(), new(10, 10), Color.White);
+            _font.DrawText(_spriteBatch, "FPS: " + _clock.Fps.ToString(), new Vector2(10, 10), 11, Color.White);
 
-            _spriteBatch.End();
-            _window.Canvas.Draw(_spriteBatch);
+            _window.End();
 
             base.Draw(gameTime);
         }

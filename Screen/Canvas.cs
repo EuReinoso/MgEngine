@@ -1,20 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MgEngine.Window
+namespace MgEngine.Screen
 {
     public class Canvas
     {
         private GraphicsDevice _graphicsDevice;
         private RenderTarget2D _renderTarget;
         private Rectangle _destinationRectangle;
-        private SpriteBatch _spriteBatch;
 
         public Canvas(GraphicsDevice graphicsDevice, int width, int height)
         {
             _graphicsDevice = graphicsDevice;
             _renderTarget = new(_graphicsDevice, width, height);
-            _spriteBatch = new(_graphicsDevice);
         }
 
         public int Width { get { return _renderTarget.Width; } }
@@ -22,8 +20,6 @@ namespace MgEngine.Window
         public int Height { get { return _renderTarget.Height; } }
 
         public Vector2 Center { get { return new Vector2(_renderTarget.Width / 2, _renderTarget.Height / 2); } }
-
-        public SpriteBatch SpriteBatch { get { return _spriteBatch; } }
 
         public RenderTarget2D RenderTarget { get { return _renderTarget; } }
 
@@ -53,23 +49,18 @@ namespace MgEngine.Window
         public void Activate()
         {
             _graphicsDevice.SetRenderTarget(_renderTarget);
-            _graphicsDevice.Clear(new Color(5, 5, 5));
+            _graphicsDevice.Clear(Color.Black);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, SpriteSortMode spriteSortMode = SpriteSortMode.BackToFront, BlendState? blendState = null, SamplerState? samplerState = null)
         {
             _graphicsDevice.SetRenderTarget(null);
-            _graphicsDevice.Clear(Color.Black);
+            _graphicsDevice.Clear(new Color(5, 5, 5));
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront);
+            spriteBatch.Begin(spriteSortMode, blendState, samplerState);
             spriteBatch.Draw(_renderTarget, _destinationRectangle, Color.White);
             spriteBatch.End();
 
-        }
-
-        public void Clear(Color color)
-        {
-            _graphicsDevice.Clear(color);
         }
 
     }

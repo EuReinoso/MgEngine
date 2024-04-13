@@ -6,16 +6,23 @@ namespace MgEngine.Font
 {
     public class Font
     {
-        private SpriteFont _spriteFont;
+        private Dictionary<int, SpriteFont> _spriteFonts;
 
-        public Font(ContentManager content, string path)
+        public Font(ContentManager content, string path, List<int> sizes)
         {
-            _spriteFont = content.Load<SpriteFont>(path);
+            _spriteFonts = new();
+
+            foreach (int size in sizes)
+            {
+                _spriteFonts.Add(size, content.Load<SpriteFont>(path + size.ToString()));
+            }
         }
 
-        public void DrawText(SpriteBatch spriteBatch, string text, Vector2 Pos, Color color, float rotation = 0)
+
+        public void DrawText(SpriteBatch spriteBatch, string text, Vector2 Pos, int size, Color color, float rotation = 0)
         {
-            spriteBatch.DrawString(_spriteFont, text, Pos, color, rotation, new Vector2(0, 0), 1, SpriteEffects.None, 1);
+
+            spriteBatch.DrawString(_spriteFonts[size], text, Pos, color, rotation, new Vector2(0, 0), 1, SpriteEffects.None, 1);
         }
 
     }

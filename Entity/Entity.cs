@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MgEngine.Sprites;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MgEngine.Entity
 {
@@ -38,6 +39,12 @@ namespace MgEngine.Entity
         public void DrawRect(Color color)
         {
             _sprites.DrawRect(Rect, color);
+        }
+
+        public void ResizeScale(float scale)
+        {
+            Width = (int)(Width * scale);
+            Height = (int)(Height * scale);
         }
 
     }

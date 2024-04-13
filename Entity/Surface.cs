@@ -21,7 +21,7 @@ namespace MgEngine.Entity
             _graphicsDevice.SetRenderTarget(renderTarget);
             _graphicsDevice.Clear(Color.Transparent);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
             _spriteBatch.Draw(texture, destinationRectangle, sourceRectangle, Color.White);
             _spriteBatch.End();
 
