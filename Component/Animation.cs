@@ -23,6 +23,7 @@ namespace MgEngine.Component
             if (_currentFrameTime >= _frameTimeList[_currentFrameIndex])
             {
                 _currentFrameIndex += (int)Math.Round(1 * dt);
+                _currentFrameTime = 0;
 
                 if (_currentFrameIndex > _frameTimeList.Count() - 1)
                     Reset();

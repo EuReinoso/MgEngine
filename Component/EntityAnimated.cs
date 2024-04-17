@@ -15,6 +15,7 @@ namespace MgEngine.Component
 
         public void SetAction(object actionKey)
         {
+            _animator.SetAction(actionKey);
             _texture = _animator.GetTexture(actionKey);
             _sourceRectangle = _animator.GetCurrentFrame();
             Width = _sourceRectangle.Width;
