@@ -5,6 +5,7 @@ using MgEngine.Scene;
 using MgEngine.Input;
 using MgEngine.Time;
 using MgEngine.Shape;
+using MgEngine.Screen;
 
 namespace GameExample
 {
@@ -15,7 +16,7 @@ namespace GameExample
         #endregion
 
         #region Constructor
-        public MainScene() : base()
+        public MainScene(Window window, Camera camera) : base(window, camera)
         { 
 
         }

@@ -10,7 +10,6 @@ namespace MgEngine.Shape
         private GraphicsDevice _graphicsDevice;
         private int[] _rectIndexes;
         private BasicEffect _effects;
-        private Window _window;
 
         #endregion
 
@@ -19,12 +18,11 @@ namespace MgEngine.Shape
         #endregion
 
         #region Constructor
-        public ShapeBatch(GraphicsDevice graphicsDevice, Window window)
+        public ShapeBatch(GraphicsDevice graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
             _effects = new(_graphicsDevice);
             _rectIndexes = new int[6];
-            _window = window;
 
             LoadEffects();
             LoadRectIndexes();
@@ -52,18 +50,18 @@ namespace MgEngine.Shape
             _rectIndexes[4] = 2;
             _rectIndexes[5] = 3;
         }
+
         #endregion
 
-        private void ReloadProjection()
+        #region Methods
+        public void Begin()
         {
+            _effects.View = Matrix.Identity;
             _effects.Projection = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, 1f);
         }
 
-        #region Draw
         public void DrawRect(Rect rect, Color color)
         {
-            ReloadProjection();
-
             VertexPositionColor[] vertices = new VertexPositionColor[4];
 
             vertices[0] = new VertexPositionColor(new Vector3(rect.Vertices[0], 0f), color);
@@ -88,8 +86,6 @@ namespace MgEngine.Shape
 
         public void DrawLine(Line line, Color color)
         {
-            ReloadProjection();
-
             VertexPositionColor[] vertices = new VertexPositionColor[4];
 
             vertices[0] = new VertexPositionColor(new Vector3(line.Vertices[0], 0f), color);

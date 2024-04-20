@@ -14,12 +14,15 @@ namespace GameExample
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Window _window;
-        private Font _font;
-        private Clock _clock;
         private ShapeBatch _shapeBatch;
-        private MainScene _scene;
+        private Font _font;
+
+        private Window _window;
+        private Camera _camera;
+        private Clock _clock;
         private Inputter _inputter;
+
+        private MainScene _scene;
 
         public GameExample()
         {
@@ -33,16 +36,18 @@ namespace GameExample
         protected override void Initialize()
         {
             _window = new(_graphics, _spriteBatch);
+            _window.SetBackGroundColor(Color.Black);
 
-            _shapeBatch = new(GraphicsDevice, _window);
+            _shapeBatch = new(GraphicsDevice);
 
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new(GraphicsDevice);
 
             _font = new(Content, "Font/monogram", new() { 8, 9, 10, 11, 12, 13, 14, 15 });
 
             _clock.IsFpsLimited = false;
             //_clock.FpsLimit = 60;
 
+            _scene = new(_window, _camera);
             _scene.Initialize();
 
             base.Initialize();
@@ -70,6 +75,8 @@ namespace GameExample
         protected override void Draw(GameTime gameTime)
         {
             _window.Begin();
+
+            _shapeBatch.Begin();
 
             _scene.Draw(_spriteBatch, _shapeBatch);
 

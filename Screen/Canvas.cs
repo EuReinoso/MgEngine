@@ -46,10 +46,10 @@ namespace MgEngine.Screen
             _destinationRectangle = new Rectangle(x, y, newWidth, newHeight);
         }
 
-        public void Activate()
+        public void Activate(Color backGroundColor)
         {
             _graphicsDevice.SetRenderTarget(_renderTarget);
-            _graphicsDevice.Clear(Color.Black);
+            _graphicsDevice.Clear(backGroundColor);
         }
 
         public void Dispose()
@@ -60,7 +60,7 @@ namespace MgEngine.Screen
 
         public void Draw(SpriteBatch spriteBatch, SpriteSortMode spriteSortMode = SpriteSortMode.BackToFront, BlendState? blendState = null, SamplerState? samplerState = null, BasicEffect? effects = null)
         {
-            spriteBatch.Begin(spriteSortMode, blendState, samplerState, effect : effects);
+            spriteBatch.Begin(spriteSortMode, blendState, samplerState,rasterizerState : RasterizerState.CullNone, effect : effects);
             spriteBatch.Draw(_renderTarget, _destinationRectangle, Color.White);
             spriteBatch.End();
         }

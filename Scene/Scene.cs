@@ -1,4 +1,5 @@
 ﻿using MgEngine.Input;
+using MgEngine.Screen;
 using MgEngine.Shape;
 using MgEngine.Time;
 using Microsoft.Xna.Framework.Content;
@@ -8,8 +9,13 @@ namespace MgEngine.Scene
 {
     public abstract class Scene
     {
-        public Scene() 
+        public Window Window;
+        public Camera Camera;
+
+        public Scene(Window window, Camera camera) 
         {
+            Window = window;
+            Camera = camera;
         }
 
         public abstract void Initialize();
@@ -20,5 +26,9 @@ namespace MgEngine.Scene
 
         public abstract void Draw(SpriteBatch spriteBatch, ShapeBatch shapeBatch);
 
+        public void NextLayer(SpriteSortMode spriteSortMode = SpriteSortMode.Deferred, BlendState? blendState = null, SamplerState? samplerState = null)
+        {
+            Window.NextLayer(spriteSortMode, blendState, samplerState);
+        }
     }
 }

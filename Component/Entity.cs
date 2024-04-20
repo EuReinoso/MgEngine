@@ -34,18 +34,12 @@ namespace MgEngine.Component
             if (_texture == null)
                 throw new Exception("Texture was null, you have to Add a Texture to start Animation");
 
-            spriteBatch.Draw(_texture, Rect.Rectangle, _sourceRectangle, Color.White, Rotation, SourceCenter, SpriteEffects.None, 1);
+            spriteBatch.Draw(_texture, Rect.Rectangle, _sourceRectangle, Color.White, Rotation, SourceCenter, SpriteEffects.None, 0f);
         }
 
         public void DrawRect(ShapeBatch shapeBatch, Color color)
         {
             shapeBatch.DrawRect(new Rect(X - (Width / 2), Y - (Height /2), Width, Height), color);
-        }
-
-        public void ResizeScale(float scale)
-        {
-            Width = (int)(Width * scale);
-            Height = (int)(Height * scale);
         }
 
     }

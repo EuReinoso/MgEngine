@@ -82,5 +82,7 @@ namespace MgEngine.Shape
             _vertices[3] = new Vector2(Left, Bottom);
         }
 
+
+
     }
 }

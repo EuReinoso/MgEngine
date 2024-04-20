@@ -54,6 +54,11 @@ namespace MgEngine.Component
             get { return new Rect(X, Y, Width, Height); }
         }
 
+        public void ResizeScale(float scale)
+        {
+            Width = (int)(Width * scale);
+            Height = (int)(Height * scale);
+        }
     }
 
 
