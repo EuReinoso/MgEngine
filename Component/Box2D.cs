@@ -29,7 +29,6 @@ namespace MgEngine.Component
             Height = height;
         }
 
-
         public int X
         {
             get { return (int)Pos.X; }
@@ -58,6 +57,11 @@ namespace MgEngine.Component
         {
             Width = (int)(Width * scale);
             Height = (int)(Height * scale);
+        }
+
+        public Vector3 Pos3
+        {
+            get { return new Vector3(Pos, 0); }
         }
     }
 

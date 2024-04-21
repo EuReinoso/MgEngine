@@ -63,7 +63,7 @@ namespace GameExample
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            _inputter.Update(Keyboard.GetState());
+            _inputter.Update(Keyboard.GetState(), Mouse.GetState());
 
             _clock.Update(gameTime);
 
