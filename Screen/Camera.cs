@@ -9,10 +9,6 @@ namespace MgEngine.Screen
     public class Camera
     {
         #region Variables
-        private float _minX;
-        private float _maxX;
-        private float _minY;
-        private float _maxY;
         private float _minZ;
         private float _maxZ;
 
@@ -20,7 +16,6 @@ namespace MgEngine.Screen
         private float _y;
         private float _z;
         private float _baseZ;
-        private float _angle;
 
         private float _aspectRatio;
         private float _fieldOfView;
@@ -28,6 +23,7 @@ namespace MgEngine.Screen
 
         private float _pitch;
         private float _yaw;
+        private float _roll;
 
         private Matrix _projection;
         private Matrix _view;
@@ -36,29 +32,25 @@ namespace MgEngine.Screen
         private Vector3 _right;
         private Vector3 _front;
 
-        private Vector3 _target;
-
         private bool _updateRequired;
         #endregion
 
         public Camera(Window window)
         {
-            _target = new Vector3 (window.Center, 0);
             _x = window.Center.X;
             _y = window.Center.Y;
 
             _view = Matrix.Identity;
             _projection = Matrix.Identity;
 
-            _minZ = 1f;
-            _maxZ = 2000f;
-
             _fieldOfView = MathHelper.PiOver2;
             _baseZ = -GetZFromHeight(window.Height);
             _z = _baseZ;
             _aspectRatio = (float)window.Width / (float)window.Height;
 
-            _angle = 0f;
+            _minZ = 1f;
+            _maxZ = 2000f;
+
             _zoom = 1f;
 
             _right = -Vector3.UnitX;
@@ -67,6 +59,7 @@ namespace MgEngine.Screen
 
             _pitch = 0;
             _yaw = 90f;
+            _roll = 0;
 
             _updateRequired = true;
 
@@ -88,19 +81,14 @@ namespace MgEngine.Screen
             } 
         }
 
-        public Vector3 Target 
-        { 
-            get { return _target; } 
-            set { _target = value; _updateRequired = true;} 
-        }
-
         public float X 
         { 
             get { return _x; } 
             set 
-            { 
-                _x = value;
+            {
                 _updateRequired = true;
+
+                _x = value;
             } 
         }
 
@@ -109,8 +97,9 @@ namespace MgEngine.Screen
             get { return _y; }
             set
             {
-                _y = value;
                 _updateRequired = true;
+
+                _y = value;
             }
         }
 
@@ -119,9 +108,21 @@ namespace MgEngine.Screen
             get { return _z; }
             set
             {
-                _z = value;
                 _updateRequired = true;
+
+                _z = value;
             }
+        }
+
+        public float Rotation 
+        {
+            get { return _roll; }
+
+            set 
+            {
+                _roll = value;
+                _updateRequired = true;
+            } 
         }
 
         public Matrix GetProjection() { return _projection; }
@@ -138,12 +139,13 @@ namespace MgEngine.Screen
 
         public void Update()
         {
-            //if (_updateRequired)
-            //{
-            //    return;
-            //}
+            if (!_updateRequired)
+                return;
+
+            UpdateVectors();
 
             _view = Matrix.CreateLookAt(Pos, Pos + _front, _up);
+
             _projection = Matrix.CreatePerspectiveFieldOfView(_fieldOfView, _aspectRatio, _minZ, _maxZ);
 
             _updateRequired = false;
@@ -168,6 +170,9 @@ namespace MgEngine.Screen
 
             _right = Vector3.Normalize(Vector3.Cross(_front, Vector3.UnitY));
             _up = Vector3.Normalize(Vector3.Cross(-_right, _front));
+
+            //ToDo _roll do not work yet
+
         }
 
         public void UpdateMoveKeys(Inputter inputter, float dt, float velocity = 10)
@@ -207,7 +212,7 @@ namespace MgEngine.Screen
             _yaw -= mouseMov.X * dt * inputter.MouseSense;
             _pitch += mouseMov.Y * dt * inputter.MouseSense;
 
-            UpdateVectors();
+            _updateRequired = true;
         }
 
         #endregion
