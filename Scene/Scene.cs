@@ -11,11 +11,13 @@ namespace MgEngine.Scene
     {
         public Window Window;
         public Camera Camera;
+        public Scroller Scroller;
 
         public Scene(Window window, Camera camera) 
         {
             Window = window;
             Camera = camera;
+            Scroller = new Scroller(window.Canvas);
         }
 
         public abstract void Initialize();

@@ -15,11 +15,24 @@ namespace MgEngine.Screen
             _renderTarget = new(_graphicsDevice, width, height);
         }
 
-        public int Width { get { return _renderTarget.Width; } }
+        public int Width { 
+            get { return _renderTarget.Width; }
+            set 
+            {
+                SetResolution(value, Height);
+            }
+        }
 
-        public int Height { get { return _renderTarget.Height; } }
+        public int Height
+        {
+            get { return _renderTarget.Height; }
+            set
+            {
+                SetResolution(Width, value);
+            }
+        }
 
-        public Vector2 Center { get { return new Vector2(_renderTarget.Width / 2, _renderTarget.Height / 2); } }
+        public Vector2 Center { get { return new Vector2(Width / 2, Height / 2); } }
 
         public RenderTarget2D RenderTarget { get { return _renderTarget; } }
 

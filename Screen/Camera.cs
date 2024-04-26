@@ -49,7 +49,7 @@ namespace MgEngine.Screen
             _aspectRatio = (float)window.Width / (float)window.Height;
 
             _minZ = 1f;
-            _maxZ = 2000f;
+            _maxZ = 2048f;
 
             _zoom = 1f;
 
@@ -111,6 +111,23 @@ namespace MgEngine.Screen
                 _updateRequired = true;
 
                 _z = value;
+            }
+        }
+
+        public float Zoom
+        {
+            get { return _zoom; }
+
+            set
+            {
+                if (value <= 0.01f)
+                    value = 0.01f;
+                else if (value >= 1)
+                    value = 1;
+
+                _zoom = value;
+                _z = _baseZ * _zoom;
+                _updateRequired = true;
             }
         }
 
@@ -213,6 +230,11 @@ namespace MgEngine.Screen
             _pitch += mouseMov.Y * dt * inputter.MouseSense;
 
             _updateRequired = true;
+        }
+
+        public void ResetZoom()
+        {
+            Zoom = 1;
         }
 
         #endregion
