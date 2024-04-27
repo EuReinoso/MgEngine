@@ -80,6 +80,8 @@ namespace GameExample
 
             _scene.Draw(_spriteBatch, _shapeBatch);
 
+            _shapeBatch.End();
+
             _font.DrawText(_spriteBatch, "FPS: " + _clock.Fps.ToString(), new Vector2(10, 10), 11, Color.White);
 
             _window.End();

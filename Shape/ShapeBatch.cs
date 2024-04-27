@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MgEngine.Screen;
+using System;
 
 namespace MgEngine.Shape
 {
@@ -10,6 +11,13 @@ namespace MgEngine.Shape
         private GraphicsDevice _graphicsDevice;
         private int[] _rectIndexes;
         private BasicEffect _effects;
+
+        private VertexPositionColor[] _vertices;
+        private int[] _indices;
+
+        private int _verticesCount;
+        private int _indexCount;
+        public int _maxVertices;
 
         #endregion
 
@@ -23,6 +31,12 @@ namespace MgEngine.Shape
             _graphicsDevice = graphicsDevice;
             _effects = new(_graphicsDevice);
             _rectIndexes = new int[6];
+
+            _maxVertices = 2048;
+            _vertices = new VertexPositionColor[_maxVertices];
+            _indices = new int[_vertices.Length * 3];
+            _verticesCount = 0;
+            _indexCount = 0;
 
             LoadEffects();
             LoadRectIndexes();
@@ -60,53 +74,83 @@ namespace MgEngine.Shape
             _effects.Projection = Matrix.CreateOrthographicOffCenter(0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height, 0, 0f, 1f);
         }
 
-        public void DrawRect(Rect rect, Color color)
+        private void Draw()
         {
-            VertexPositionColor[] vertices = new VertexPositionColor[4];
+            if (_verticesCount == 0)
+                return;
 
-            vertices[0] = new VertexPositionColor(new Vector3(rect.Vertices[0], 0f), color);
-            vertices[1] = new VertexPositionColor(new Vector3(rect.Vertices[1], 0f), color);
-            vertices[2] = new VertexPositionColor(new Vector3(rect.Vertices[2], 0f), color);
-            vertices[3] = new VertexPositionColor(new Vector3(rect.Vertices[3], 0f), color);
+            int primitiveCount = _indexCount / 3;
 
             foreach (EffectPass pass in _effects.CurrentTechnique.Passes)
             {
                 pass.Apply();
 
-                _graphicsDevice.DrawUserIndexedPrimitives(
+                _graphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
                     PrimitiveType.TriangleList,
-                    vertices,
+                    _vertices,
                     0,
-                    4,
-                    _rectIndexes,
+                    _verticesCount,
+                    _indices,
                     0,
-                    2);
+                    primitiveCount);
             }
+
+            _verticesCount = 0;
+            _indexCount = 0;
+        }
+
+        public void End()
+        {
+            Draw();
+        }
+
+        private void VerifyVerticeSpace(int verticesNeeded)
+        {
+            if (_verticesCount + verticesNeeded >= _maxVertices)
+                Draw();
+        }
+
+        public void SetMaxVerticesSize(int newSize)
+        {
+            _maxVertices = newSize;
+            _vertices = new VertexPositionColor[newSize];
+            _indices = new int[newSize * 3];
+        }
+
+        public void DrawRect(Rect rect, Color color)
+        {
+            VerifyVerticeSpace(4);
+
+            _indices[_indexCount++] = 0 + _verticesCount;
+            _indices[_indexCount++] = 1 + _verticesCount;
+            _indices[_indexCount++] = 2 + _verticesCount;
+            _indices[_indexCount++] = 0 + _verticesCount;
+            _indices[_indexCount++] = 2 + _verticesCount;
+            _indices[_indexCount++] = 3 + _verticesCount;
+
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(rect.Vertices[0], 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(rect.Vertices[1], 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(rect.Vertices[2], 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(rect.Vertices[3], 0f), color);
         }
 
         public void DrawLine(Line line, Color color)
         {
-            VertexPositionColor[] vertices = new VertexPositionColor[4];
+            VerifyVerticeSpace(4);
 
-            vertices[0] = new VertexPositionColor(new Vector3(line.Vertices[0], 0f), color);
-            vertices[1] = new VertexPositionColor(new Vector3(line.Vertices[1], 0f), color);
-            vertices[2] = new VertexPositionColor(new Vector3(line.Vertices[2], 0f), color);
-            vertices[3] = new VertexPositionColor(new Vector3(line.Vertices[3], 0f), color);
+            _indices[_indexCount++] = 0 + _verticesCount;
+            _indices[_indexCount++] = 1 + _verticesCount;
+            _indices[_indexCount++] = 2 + _verticesCount;
+            _indices[_indexCount++] = 0 + _verticesCount;
+            _indices[_indexCount++] = 2 + _verticesCount;
+            _indices[_indexCount++] = 3 + _verticesCount;
 
-            foreach (EffectPass pass in _effects.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                _graphicsDevice.DrawUserIndexedPrimitives(
-                    PrimitiveType.TriangleList,
-                    vertices,
-                    0,
-                    4,
-                    _rectIndexes,
-                    0,
-                    2);
-            }
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(line.Vertices[0], 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(line.Vertices[1], 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(line.Vertices[2], 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(line.Vertices[3], 0f), color);
         }
+
 
         #endregion
 
