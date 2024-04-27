@@ -1,6 +1,8 @@
 ﻿
 
 using MgEngine.Component;
+using System;
+using System.Collections.Generic;
 
 namespace MgEngine.Component
 {

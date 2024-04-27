@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MgEngine.Shape;
+using System;
 
 namespace MgEngine.Component
 {

@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace MgEngine.Util
 {
     public static class MgMath
