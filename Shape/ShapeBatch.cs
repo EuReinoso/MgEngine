@@ -151,6 +151,17 @@ namespace MgEngine.Shape
             _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(line.Vertices[3], 0f), color);
         }
 
+        public void DrawCircle(Circle circle, Color color)
+        {
+            for (int i = 0; i < circle.Vertices.Length; i++)
+            {
+                Vector2 p1 = circle.Vertices[i];
+                Vector2 p2 = circle.Vertices[(i + 1) % circle.Vertices.Length];
+
+                DrawLine(new Line(p1, p2, 1), color);
+            }
+        }
+
 
         #endregion
 

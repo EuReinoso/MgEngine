@@ -9,9 +9,17 @@ namespace MgEngine.Util
         {
             return (float)(angleDegrees * (Math.PI / 180));
         }
+
         public static float ToDegrees(float angleRadians)
         {
             return (float)(angleRadians / (Math.PI / 180));
+        }
+
+        public static void Normalize(ref float x, ref float y)
+        {
+            float invLen = 1f / MathF.Sqrt(x * x + y * y);
+            x *= invLen;
+            y *= invLen;
         }
     }
 }

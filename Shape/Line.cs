@@ -74,7 +74,7 @@ namespace MgEngine.Shape
 
             float halfWidth = Width / 2f;
 
-            Vector2 e1 = _p1 - _p2;
+            Vector2 e1 = _p2 - _p1;
             e1.Normalize();
             e1 *= halfWidth;
 
