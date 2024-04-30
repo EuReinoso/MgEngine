@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MgEngine.Screen;
 using System;
+using MgEngine.Util;
 
 namespace MgEngine.Shape
 {
@@ -151,16 +152,68 @@ namespace MgEngine.Shape
             _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(line.Vertices[3], 0f), color);
         }
 
+        public void DrawLine(float p1x, float p1y, float p2x, float p2y, float width, Color color)
+        {
+            VerifyVerticeSpace(4);
+
+            float halfWidth = width / 2f;
+
+            float e1x = p2x - p1x;
+            float e1y = p2y - p1y;
+
+            MgMath.Normalize(ref e1x, ref e1y);
+
+            e1x *= halfWidth;
+            e1y *= halfWidth;
+
+            float e2x = -e1x;
+            float e2y = -e1y;
+
+            float n1x = -e1y;
+            float n1y = e1x;
+
+            float n2x = -n1x;
+            float n2y = -n1y;
+
+            float ax = p1x + n1x + e2x;
+            float ay = p1y + n1y + e2y;
+
+            float bx = p2x + n1x + e1x;
+            float by = p2y + n1y + e1y;
+
+            float cx = p2x + n2x + e1x;
+            float cy = p2y + n2y + e1y;
+
+            float dx = p1x + n2x + e2x;
+            float dy = p1y + n2y + e2y;
+
+            _indices[_indexCount++] = 0 + _verticesCount;
+            _indices[_indexCount++] = 1 + _verticesCount;
+            _indices[_indexCount++] = 2 + _verticesCount;
+            _indices[_indexCount++] = 0 + _verticesCount;
+            _indices[_indexCount++] = 2 + _verticesCount;
+            _indices[_indexCount++] = 3 + _verticesCount;
+
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(ax, ay, 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(bx, by, 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(cx, cy, 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, 0f), color);
+        }
+
         public void DrawCircle(Circle circle, Color color)
         {
             for (int i = 0; i < circle.Vertices.Length; i++)
             {
-                Vector2 p1 = circle.Vertices[i];
-                Vector2 p2 = circle.Vertices[(i + 1) % circle.Vertices.Length];
+                float p1x = circle.Vertices[i].X;
+                float p1y = circle.Vertices[i].Y;
 
-                DrawLine(new Line(p1, p2, 1), color);
+                float p2x = circle.Vertices[(i + 1) % circle.Vertices.Length].X;
+                float p2y = circle.Vertices[(i + 1) % circle.Vertices.Length].Y;
+
+                DrawLine(p1x, p1y, p2x, p2y, 1, color);
             }
         }
+
 
 
         #endregion

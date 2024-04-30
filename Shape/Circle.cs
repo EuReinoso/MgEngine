@@ -6,22 +6,27 @@ namespace MgEngine.Shape
 {
     public class Circle
     {
+        #region Variables
         private Vector2[] _vertices;
 
         private float _x;
         private float _y;
         private float _radius;
         private int _points;
+        #endregion
 
+        #region Constructor
         public Circle(int x, int y, float radius, int points = 10)
         {
             _x = x;
             _y = y;
             _radius = radius;
             _points = points;
+            _vertices = new Vector2[_points];
 
-            CalculateVertices();
+            CalculateVertices(false);
         }
+        #endregion
 
         #region Properties
         public Vector2[] Vertices { get { return _vertices; } }
@@ -37,7 +42,6 @@ namespace MgEngine.Shape
             }
         }
 
-
         public int Y
         {
             get { return (int)_y; }
@@ -49,11 +53,35 @@ namespace MgEngine.Shape
             }
         }
 
+        public int Radius
+        {
+            get { return (int)_radius; }
+
+            set
+            {
+                _radius = value;
+                CalculateVertices();
+            }
+        }
+
+        public int Points
+        {
+            get { return _points; }
+
+            set 
+            {
+                _points = value;
+                CalculateVertices(false);
+            }
+        }
+
         #endregion
 
-        private void CalculateVertices()
+        #region Methods
+        private void CalculateVertices(bool resizeVertices = true)
         {
-            _vertices = new Vector2[_points];
+            if (resizeVertices)
+                _vertices = new Vector2[_points];
 
             float deltaAngle = MathHelper.TwoPi / (float)_points;
             float angle = 0;
@@ -64,10 +92,10 @@ namespace MgEngine.Shape
                 float vy = MathF.Sin(angle) * _radius + _y;
 
                 _vertices[i] = new Vector2(vx, vy);
-                //_vertices[i] *= 0.5f;
 
                 angle += deltaAngle;
             }
         }
+        #endregion
     }
 }

@@ -4,13 +4,13 @@ namespace MgEngine.Shape
 {
     public class Line
     {
-        private bool _initialized;
-
+        #region Variables
         private Vector2 _p1;
         private Vector2 _p2;
-        public int Width;
+        private int _width;
 
         private Vector2[] _vertices;
+        #endregion
 
         #region Properties
         public Vector2 P1
@@ -35,23 +35,34 @@ namespace MgEngine.Shape
             }
         }
 
+        public int Width
+        {
+            get { return _width; }
+
+            set
+            {
+                _width = value;
+
+                CalculateVertices();
+            }
+        }
+
+        public Vector2[] Vertices { get { return _vertices; } }
+
         public int Length
         {
             get { return (int)Vector2.Distance(_p1, _p2); }
         }
 
-        public Vector2[] Vertices { get { return _vertices; } }
-
         #endregion
 
-
+        #region Constructor
         public Line(Vector2 p1, Vector2 p2, int width = 1)
         {
             _p1 = p1;
             _p2 = p2;
-            Width = width;
-            _initialized = true;
-
+            _width = width;
+            
             _vertices = new Vector2[4];
             CalculateVertices();
         }
@@ -60,19 +71,17 @@ namespace MgEngine.Shape
         {
             _p1 = new Vector2(p1x, p1y);
             _p2 = new Vector2(p2x, p2y);
-            Width = width;
-            _initialized = true;
+            _width = width;
+
+            _vertices = new Vector2[4];
             CalculateVertices();
         }
+        #endregion
 
+        #region Methods
         private void CalculateVertices()
         {
-            if (!_initialized)
-            {
-                return;
-            }
-
-            float halfWidth = Width / 2f;
+            float halfWidth = _width / 2f;
 
             Vector2 e1 = _p2 - _p1;
             e1.Normalize();
@@ -87,6 +96,6 @@ namespace MgEngine.Shape
             _vertices[2] = _p2 + n2 + e1;
             _vertices[3] = _p1 + n2 + e2;
         }
-
+        #endregion
     }
 }
