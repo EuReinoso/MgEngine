@@ -152,11 +152,11 @@ namespace MgEngine.Shape
             _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(line.Vertices[3], 0f), color);
         }
 
-        public void DrawLine(float p1x, float p1y, float p2x, float p2y, float width, Color color)
+        public void DrawLine(float p1x, float p1y, float p2x, float p2y, float lineWidth, Color color)
         {
             VerifyVerticeSpace(4);
 
-            float halfWidth = width / 2f;
+            float halfWidth = lineWidth / 2f;
 
             float e1x = p2x - p1x;
             float e1y = p2y - p1y;
@@ -200,7 +200,7 @@ namespace MgEngine.Shape
             _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, 0f), color);
         }
 
-        public void DrawCircle(Circle circle, Color color)
+        public void DrawCircle(Circle circle, Color color, int lineWidth = 1)
         {
             for (int i = 0; i < circle.Vertices.Length; i++)
             {
@@ -210,10 +210,23 @@ namespace MgEngine.Shape
                 float p2x = circle.Vertices[(i + 1) % circle.Vertices.Length].X;
                 float p2y = circle.Vertices[(i + 1) % circle.Vertices.Length].Y;
 
-                DrawLine(p1x, p1y, p2x, p2y, 1, color);
+                DrawLine(p1x, p1y, p2x, p2y, lineWidth, color);
             }
         }
 
+        public void DrawPolygon(Vector2[] vertices, Color color, int lineWidth = 1)
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                float p1x = vertices[i].X;
+                float p1y = vertices[i].Y;
+
+                float p2x = vertices[(i + 1) % vertices.Length].X;
+                float p2y = vertices[(i + 1) % vertices.Length].Y;
+
+                DrawLine(p1x, p1y, p2x, p2y, lineWidth, color);
+            }
+        }
 
 
         #endregion
