@@ -8,9 +8,10 @@ namespace MgEngine.Shape
 
         private Vector2[] _vertices;
 
-        public Rect(int x, int y, int width, int height) : base(x, y, width, height)
+        public Rect(int x, int y, int width, int height, float rotation = 0) : base(x, y, width, height)
         {
             _vertices = new Vector2[4];
+            Rotation = rotation;
             CalculateVertices();
         }
 
@@ -38,7 +39,6 @@ namespace MgEngine.Shape
                 CalculateVertices();
             }
         }
-
 
         public new int Y
         {
@@ -69,6 +69,17 @@ namespace MgEngine.Shape
             set
             {
                 base.Height = value;
+                CalculateVertices();
+            }
+        }
+
+        public new float Rotation
+        {
+            get { return base.Rotation; }
+
+            set
+            {
+                base.Rotation = value;
                 CalculateVertices();
             }
         }

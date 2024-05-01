@@ -89,7 +89,7 @@ namespace MgEngine.Shape
                 _vertices = new Vector2[_points];
 
             float deltaAngle = MathHelper.TwoPi / (float)_points;
-            float angle = 0;
+            float angle = -1.57079637f;
 
             for (int i = 0; i < _points; i++)
             {
