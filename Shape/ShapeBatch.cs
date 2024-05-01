@@ -200,8 +200,14 @@ namespace MgEngine.Shape
             _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, 0f), color);
         }
 
-        public void DrawCircle(Circle circle, Color color, int lineWidth = 1)
+        public void DrawCircle(Circle circle, Color color)
         {
+            if (circle.Filled)
+            {
+                DrawCircleFill(circle, color);
+                return;
+            }
+
             for (int i = 0; i < circle.Vertices.Length; i++)
             {
                 float p1x = circle.Vertices[i].X;
@@ -210,7 +216,31 @@ namespace MgEngine.Shape
                 float p2x = circle.Vertices[(i + 1) % circle.Vertices.Length].X;
                 float p2y = circle.Vertices[(i + 1) % circle.Vertices.Length].Y;
 
-                DrawLine(p1x, p1y, p2x, p2y, lineWidth, color);
+                DrawLine(p1x, p1y, p2x, p2y, circle.LineWidth, color);
+            }
+        }
+
+        private void DrawCircleFill(Circle circle, Color color)
+        {
+            int verticesLenght = circle.Vertices.Length;
+
+            VerifyVerticeSpace(verticesLenght);
+
+            int triangleCount = verticesLenght - 2;
+
+            int index = 1;
+            for (int i = 0; i < triangleCount; i++)
+            {
+                _indices[_indexCount++] = _verticesCount;
+                _indices[_indexCount++] = index + _verticesCount;
+                _indices[_indexCount++] = 1 + index + _verticesCount;
+
+                index++;
+            }
+
+            for (int i = 0; i < verticesLenght; i++)
+            {
+                _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(circle.Vertices[i], 0f), color);
             }
         }
 

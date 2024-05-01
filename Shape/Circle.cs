@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-
 namespace MgEngine.Shape
 {
     public class Circle
@@ -13,16 +12,22 @@ namespace MgEngine.Shape
         private float _y;
         private float _radius;
         private int _points;
+
+        public bool Filled;
+        public int LineWidth;
         #endregion
 
         #region Constructor
-        public Circle(int x, int y, float radius, int points = 10)
+        public Circle(int x, int y, float radius, int points = 10, bool filled = true, int lineWidth = 1)
         {
             _x = x;
             _y = y;
             _radius = radius;
             _points = points;
             _vertices = new Vector2[_points];
+
+            Filled = filled;
+            LineWidth = lineWidth;
 
             CalculateVertices(false);
         }
