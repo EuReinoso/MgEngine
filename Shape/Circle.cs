@@ -29,7 +29,7 @@ namespace MgEngine.Shape
             Filled = filled;
             LineWidth = lineWidth;
 
-            CalculateVertices(false);
+            CalculateVertices(true);
         }
         #endregion
 
@@ -73,17 +73,29 @@ namespace MgEngine.Shape
         {
             get { return _points; }
 
-            set 
+            set
             {
                 _points = value;
                 CalculateVertices(false);
             }
         }
 
+        public Vector2 Center 
+        { 
+            get { return new Vector2(_x, _y); } 
+
+            set 
+            {
+                _x = (int)value.X;
+                _y = (int)value.Y;
+                CalculateVertices();
+            }
+        }
+
         #endregion
 
         #region Methods
-        private void CalculateVertices(bool resizeVertices = true)
+        private void CalculateVertices(bool resizeVertices = false)
         {
             if (resizeVertices)
                 _vertices = new Vector2[_points];
@@ -101,6 +113,37 @@ namespace MgEngine.Shape
                 angle += deltaAngle;
             }
         }
+
+        public bool CollideCircle(Circle circle)
+        {
+            float distance = Vector2.Distance(Center, circle.Center);
+            float radiusSum = _radius + circle.Radius;
+
+            if (radiusSum >= distance)
+                return false;
+
+            return true;
+        }
+
+        public bool CollideCircle(Circle circle, out Vector2 normal, out float depth)
+        {
+            float distance = Vector2.Distance(Center, circle.Center);
+            float radiusSum = _radius + circle.Radius;
+
+            if (distance >= radiusSum)
+            {
+                normal = Vector2.Zero;
+                depth = 0f;
+
+                return false;
+            }
+
+            normal = Vector2.Normalize(circle.Center - Center);
+            depth = radiusSum - distance;
+
+            return true;
+        }
+
         #endregion
     }
 }
