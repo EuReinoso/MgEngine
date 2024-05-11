@@ -24,9 +24,14 @@ namespace MgEngine.Util
             return new Color(new Random().Next(0, 255), new Random().Next(0, 255), new Random().Next(0, 255));
         }
 
-        public static Vector2 RandomWindowPos(Window window)
+        public static Vector2 RandomWindowPos(Window window, int margin = 0)
         {
-            return new Vector2(new Random().Next(0, window.Width), new Random().Next(0, window.Height));
+            return new Vector2(new Random().Next(0 + margin, window.Width - margin), new Random().Next(0, window.Height - margin));
+        }
+
+        public static Vector2 RandomCanvasPos(Canvas canvas, int margin = 0)
+        {
+            return new Vector2(new Random().Next(0 + margin, canvas.Width - margin), new Random().Next(0, canvas.Height - margin));
         }
     }
 }

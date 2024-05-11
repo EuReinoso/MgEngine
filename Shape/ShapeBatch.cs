@@ -16,7 +16,7 @@ namespace MgEngine.Shape
 
         private int _verticesCount;
         private int _indexCount;
-        public int _maxVertices;
+        private int _maxVertices;
 
         #endregion
 
@@ -213,10 +213,10 @@ namespace MgEngine.Shape
             _indices[_indexCount++] = 2 + _verticesCount;
             _indices[_indexCount++] = 3 + _verticesCount;
 
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(ax, ay, -0f), color);
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(bx, by, -0f), color);
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(cx, cy, -0f), color);
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, -0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(ax, ay, 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(bx, by, 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(cx, cy, 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, 0f), color);
         }
 
         public void DrawCircle(Circle circle, Color color, Color? borderColor = null, float borderWidth = 0)
@@ -265,15 +265,20 @@ namespace MgEngine.Shape
             }
         }
 
-        public void DrawPolygon(Vector2[] vertices, Color color, int lineWidth = 1)
+        public void DrawPolygon(Polygon polygon, Color color, int lineWidth = 1)
         {
-            for (int i = 0; i < vertices.Length; i++)
+            DrawPolygon(polygon.Vertices, color, lineWidth);
+        }
+
+        public void DrawPolygon(List<Vector2> vertices, Color color, int lineWidth = 1)
+        {
+            for (int i = 0; i < vertices.Count; i++)
             {
                 float p1x = vertices[i].X;
                 float p1y = vertices[i].Y;
 
-                float p2x = vertices[(i + 1) % vertices.Length].X;
-                float p2y = vertices[(i + 1) % vertices.Length].Y;
+                float p2x = vertices[(i + 1) % vertices.Count].X;
+                float p2y = vertices[(i + 1) % vertices.Count].Y;
 
                 DrawLine(p1x, p1y, p2x, p2y, lineWidth, color);
             }
