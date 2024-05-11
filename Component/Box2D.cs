@@ -15,13 +15,13 @@ namespace MgEngine.Component
         {
         }
 
-        public Box2D(int x, int y)
+        public Box2D(float x, float y)
         {
             X = x;
             Y = y;
         }
 
-        public Box2D(int x, int y, int width, int height)
+        public Box2D(float x, float y, int width, int height)
         {
             X = x;
             Y = y;
@@ -29,14 +29,14 @@ namespace MgEngine.Component
             Height = height;
         }
 
-        public int X
+        public float X
         {
             get { return (int)Pos.X; }
 
             set { Pos = new Vector2(value, Pos.Y); }
         }
 
-        public int Y
+        public float Y
         {
             get { return (int)Pos.Y; }
 

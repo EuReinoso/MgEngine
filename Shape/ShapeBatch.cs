@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MgEngine.Screen;
-using System;
 using MgEngine.Util;
 
 namespace MgEngine.Shape
@@ -118,7 +116,28 @@ namespace MgEngine.Shape
             _indices = new int[newSize * 3];
         }
 
-        public void DrawRect(Rect rect, Color color)
+        public void DrawRect(Rect rect, Color color, Color? borderColor = null, float borderWidth = 0)
+        {
+            DrawRectFill(rect, color);
+
+            borderColor = borderColor is null ? Color.White : borderColor;
+
+            if (borderWidth > 0)
+                DrawRect(rect, (Color)borderColor, borderWidth);
+        }
+
+        public void DrawRect(Rect rect, Color color, float lineWidth)
+        {
+            for (int i = 0; i < rect.Vertices.Length; i++)
+            {
+                Vector2 p1 = rect.Vertices[i];
+                Vector2 p2 = rect.Vertices[(i + 1) % rect.Vertices.Length];
+
+                DrawLine(p1.X, p1.Y, p2.X, p2.Y, lineWidth, color);
+            }
+        }
+
+        public void DrawRectFill(Rect rect, Color color)
         {
             VerifyVerticeSpace(4);
 
@@ -194,10 +213,10 @@ namespace MgEngine.Shape
             _indices[_indexCount++] = 2 + _verticesCount;
             _indices[_indexCount++] = 3 + _verticesCount;
 
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(ax, ay, 0f), color);
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(bx, by, 0f), color);
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(cx, cy, 0f), color);
-            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, 0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(ax, ay, -0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(bx, by, -0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(cx, cy, -0f), color);
+            _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, -0f), color);
         }
 
         public void DrawCircle(Circle circle, Color color, Color? borderColor = null, float borderWidth = 0)
@@ -215,13 +234,10 @@ namespace MgEngine.Shape
         {
             for (int i = 0; i < circle.Vertices.Length; i++)
             {
-                float p1x = circle.Vertices[i].X;
-                float p1y = circle.Vertices[i].Y;
+                Vector2 p1 = circle.Vertices[i];
+                Vector2 p2 = circle.Vertices[(i + 1) % circle.Vertices.Length];
 
-                float p2x = circle.Vertices[(i + 1) % circle.Vertices.Length].X;
-                float p2y = circle.Vertices[(i + 1) % circle.Vertices.Length].Y;
-
-                DrawLine(p1x, p1y, p2x, p2y, lineWidth, color);
+                DrawLine(p1.X, p1.Y, p2.X, p2.Y, lineWidth, color);
             }
         }
 

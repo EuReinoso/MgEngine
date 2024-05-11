@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MgEngine.Screen;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,6 +22,11 @@ namespace MgEngine.Util
         public static Color RandomColor()
         {
             return new Color(new Random().Next(0, 255), new Random().Next(0, 255), new Random().Next(0, 255));
+        }
+
+        public static Vector2 RandomWindowPos(Window window)
+        {
+            return new Vector2(new Random().Next(0, window.Width), new Random().Next(0, window.Height));
         }
     }
 }

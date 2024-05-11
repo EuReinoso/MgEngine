@@ -8,7 +8,7 @@ namespace MgEngine.Shape
 
         private Vector2[] _vertices;
 
-        public Rect(int x, int y, int width, int height, float rotation = 0) : base(x, y, width, height)
+        public Rect(float x, float y, int width, int height, float rotation = 0) : base(x, y, width, height)
         {
             _vertices = new Vector2[4];
             Rotation = rotation;
@@ -22,16 +22,16 @@ namespace MgEngine.Shape
         }
 
         #region Properties
-        public int Left { get { return X; } }
-        public int Right { get { return X + Width; } }
-        public int Top { get { return Y; } }
-        public int Bottom { get { return Y + Height; } }
+        public float Left { get { return X; } }
+        public float Right { get { return X + Width; } }
+        public float Top { get { return Y; } }
+        public float Bottom { get { return Y + Height; } }
         public Vector2[] Vertices { get { return _vertices; } }
-        public Rectangle Rectangle { get { return new Rectangle(X, Y, Width, Height); } }
+        public Rectangle Rectangle { get { return new Rectangle((int)X, (int)Y, Width, Height); } }
 
-        public new int X
+        public new float X
         {
-            get { return (int)Pos.X; }
+            get { return Pos.X; }
 
             set
             {
@@ -40,9 +40,9 @@ namespace MgEngine.Shape
             }
         }
 
-        public new int Y
+        public new float Y
         {
-            get { return (int)Pos.Y; }
+            get { return Pos.Y; }
 
             set
             {
