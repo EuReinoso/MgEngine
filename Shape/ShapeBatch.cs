@@ -200,14 +200,19 @@ namespace MgEngine.Shape
             _vertices[_verticesCount++] = new VertexPositionColor(new Vector3(dx, dy, 0f), color);
         }
 
-        public void DrawCircle(Circle circle, Color color)
+        public void DrawCircle(Circle circle, Color color, Color? borderColor = null, float borderWidth = 0)
         {
-            if (circle.Filled)
-            {
-                DrawCircleFill(circle, color);
-                return;
-            }
+            DrawCircleFill(circle, color);
 
+            borderColor = borderColor is null ? Color.White : borderColor;
+
+            if (borderWidth > 0)
+                DrawCircle(circle, (Color)borderColor, borderWidth);
+
+        }
+        
+        public void DrawCircle(Circle circle, Color color, float lineWidth)
+        {
             for (int i = 0; i < circle.Vertices.Length; i++)
             {
                 float p1x = circle.Vertices[i].X;
@@ -216,7 +221,7 @@ namespace MgEngine.Shape
                 float p2x = circle.Vertices[(i + 1) % circle.Vertices.Length].X;
                 float p2y = circle.Vertices[(i + 1) % circle.Vertices.Length].Y;
 
-                DrawLine(p1x, p1y, p2x, p2y, circle.LineWidth, color);
+                DrawLine(p1x, p1y, p2x, p2y, lineWidth, color);
             }
         }
 

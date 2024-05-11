@@ -8,26 +8,19 @@ namespace MgEngine.Shape
         #region Variables
         private Vector2[] _vertices;
 
-        private float _x;
-        private float _y;
+        private Vector2 _pos;
         private float _radius;
         private int _points;
 
-        public bool Filled;
-        public int LineWidth;
         #endregion
 
         #region Constructor
-        public Circle(int x, int y, float radius, int points = 10, bool filled = true, int lineWidth = 1)
+        public Circle(float x, float y, float radius, int points = 10)
         {
-            _x = x;
-            _y = y;
+            _pos =  new Vector2(x, y);
             _radius = radius;
             _points = points;
             _vertices = new Vector2[_points];
-
-            Filled = filled;
-            LineWidth = lineWidth;
 
             CalculateVertices(true);
         }
@@ -36,24 +29,24 @@ namespace MgEngine.Shape
         #region Properties
         public Vector2[] Vertices { get { return _vertices; } }
 
-        public int X
+        public float X
         {
-            get { return (int)_x; }
+            get { return _pos.X; }
 
             set
             {
-                _x = value;
+                _pos = new Vector2(value, _pos.Y);
                 CalculateVertices();
             }
         }
 
-        public int Y
+        public float Y
         {
-            get { return (int)_y; }
+            get { return _pos.Y; }
 
             set
             {
-                _y = value;
+                _pos = new Vector2(_pos.X, value);
                 CalculateVertices();
             }
         }
@@ -80,14 +73,13 @@ namespace MgEngine.Shape
             }
         }
 
-        public Vector2 Center 
+        public Vector2 Pos
         { 
-            get { return new Vector2(_x, _y); } 
+            get { return _pos; }
 
             set 
             {
-                _x = (int)value.X;
-                _y = (int)value.Y;
+                _pos = value;
                 CalculateVertices();
             }
         }
@@ -105,8 +97,8 @@ namespace MgEngine.Shape
 
             for (int i = 0; i < _points; i++)
             {
-                float vx = MathF.Cos(angle) * _radius + _x;
-                float vy = MathF.Sin(angle) * _radius + _y;
+                float vx = MathF.Cos(angle) * _radius + _pos.X;
+                float vy = MathF.Sin(angle) * _radius + _pos.Y;
 
                 _vertices[i] = new Vector2(vx, vy);
 
@@ -116,7 +108,7 @@ namespace MgEngine.Shape
 
         public bool CollideCircle(Circle circle)
         {
-            float distance = Vector2.Distance(Center, circle.Center);
+            float distance = Vector2.Distance(_pos, circle.Pos);
             float radiusSum = _radius + circle.Radius;
 
             if (radiusSum >= distance)
@@ -127,7 +119,7 @@ namespace MgEngine.Shape
 
         public bool CollideCircle(Circle circle, out Vector2 normal, out float depth)
         {
-            float distance = Vector2.Distance(Center, circle.Center);
+            float distance = Vector2.Distance(_pos, circle.Pos);
             float radiusSum = _radius + circle.Radius;
 
             if (distance >= radiusSum)
@@ -138,7 +130,7 @@ namespace MgEngine.Shape
                 return false;
             }
 
-            normal = Vector2.Normalize(circle.Center - Center);
+            normal = Vector2.Normalize(circle.Pos - _pos);
             depth = radiusSum - distance;
 
             return true;

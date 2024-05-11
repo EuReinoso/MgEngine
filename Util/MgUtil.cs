@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace MgEngine.Util
 {
-    public static class UContent
+    public static class MgUtil
     {
         public static Texture2D GetTexture2D(ContentManager content, string path)
         {
@@ -16,6 +16,11 @@ namespace MgEngine.Util
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public static Color RandomColor()
+        {
+            return new Color(new Random().Next(0, 255), new Random().Next(0, 255), new Random().Next(0, 255));
         }
     }
 }
