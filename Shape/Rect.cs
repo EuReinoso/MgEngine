@@ -1,4 +1,5 @@
 ﻿using MgEngine.Component;
+using MgEngine.Util;
 using Microsoft.Xna.Framework;
 
 namespace MgEngine.Shape
@@ -22,11 +23,18 @@ namespace MgEngine.Shape
         }
 
         #region Properties
-        public float Left { get { return X; } }
-        public float Right { get { return X + Width; } }
-        public float Top { get { return Y; } }
-        public float Bottom { get { return Y + Height; } }
+        //public float Left { get { return X; } }
+        //public float Right { get { return X + Width; } }
+        //public float Top { get { return Y; } }
+        //public float Bottom { get { return Y + Height; } }
+
+        public float Left { get { return X - Width / 2; } }
+        public float Right { get { return X + Width / 2; } }
+        public float Top { get { return Y - Height / 2; } }
+        public float Bottom { get { return Y + Height / 2; } }
+
         public Vector2[] Vertices { get { return _vertices; } }
+
         public Rectangle Rectangle { get { return new Rectangle((int)X, (int)Y, Width, Height); } }
 
         public new float X
@@ -91,6 +99,14 @@ namespace MgEngine.Shape
             _vertices[1] = new Vector2(Right, Top);
             _vertices[2] = new Vector2(Right, Bottom);
             _vertices[3] = new Vector2(Left, Bottom);
+
+            if (Rotation == 0)
+                return;
+
+            for(int i = 0; i < _vertices.Length; i++)
+            {
+                _vertices[i] = MgMath.RotateVectorCenter(_vertices[i], Pos, Rotation);
+            }
         }
 
 

@@ -43,11 +43,6 @@ namespace MgEngine.Component
             set { Pos = new Vector2(Pos.X, value); }
         }
 
-        public Vector2 Center
-        {
-            get { return new Vector2((Width / 2), (Height / 2)); }
-        }
-
         public Rect Rect
         {
             get { return new Rect(X, Y, Width, Height); }

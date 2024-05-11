@@ -40,10 +40,7 @@ namespace MgEngine.Component
 
         public void DrawRect(ShapeBatch shapeBatch,  Color color, float scrollX = 0, float scrollY = 0)
         {
-            int x = (int)(X - (Width / 2) + scrollX);
-            int y = (int)(Y - (Height / 2) + scrollY);
-
-            Rect rect = new Rect(x, y, Width, Height, Rotation);
+            Rect rect = new Rect(X + scrollX, Y + scrollY, Width, Height, Rotation);
 
             shapeBatch.DrawRect(rect, color);
         }
