@@ -9,14 +9,7 @@ namespace MgEngine.Util
     {
         public static Texture2D GetTexture2D(ContentManager content, string path)
         {
-            try
-            {
-                return content.Load<Texture2D>(path);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return content.Load<Texture2D>(path);
         }
 
         public static Color RandomColor()
@@ -32,6 +25,11 @@ namespace MgEngine.Util
         public static Vector2 RandomCanvasPos(Canvas canvas, int margin = 0)
         {
             return new Vector2(new Random().Next(0 + margin, canvas.Width - margin), new Random().Next(0, canvas.Height - margin));
+        }
+
+        public static Vector2 RandomPos(int minX, int maxX, int minY, int maxY)
+        {
+            return new Vector2(new Random().Next(minX, maxX), new Random().Next(minY, maxY));
         }
     }
 }

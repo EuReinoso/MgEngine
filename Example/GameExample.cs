@@ -30,13 +30,14 @@ namespace GameExample
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             _clock = new(this);
-            _inputter = new();
         }
 
         protected override void Initialize()
         {
             _window = new(_graphics, _spriteBatch);
             _window.SetBackGroundColor(Color.Black);
+
+            _inputter = new(_window);
 
             _shapeBatch = new(GraphicsDevice);
 

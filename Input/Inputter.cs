@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using MgEngine.Screen;
 
 namespace MgEngine.Input
 {
@@ -11,10 +12,12 @@ namespace MgEngine.Input
         private MouseState _lastMouseState;
 
         private float _mouseSense;
+        private Window _window;
 
-        public Inputter()
+        public Inputter(Window window)
         {
             _mouseSense = 0.5f;
+            _window = window;
         }
 
         public void Update(KeyboardState keyState, MouseState mouseState)
@@ -57,7 +60,9 @@ namespace MgEngine.Input
 
         public Vector2 GetMousePos()
         {
-            return new Vector2(_mouseState.X, _mouseState.Y);
+            Vector2 ratio = _window.GetCanvasRatio();
+
+            return new Vector2(_mouseState.X * ratio.X, _mouseState.Y * ratio.Y);
         }
 
         public void SetMousePos(Vector2 pos)

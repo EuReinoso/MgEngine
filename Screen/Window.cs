@@ -48,6 +48,11 @@ namespace MgEngine.Screen
 
         #region Methods
 
+        public Vector2 GetCanvasRatio()
+        {
+            return new Vector2(Width / Canvas.Width, Height / Canvas.Height);
+        }
+
         public void SetCamera(Camera camera)
         {
             _camera = camera;
@@ -122,6 +127,7 @@ namespace MgEngine.Screen
             _spriteBatch.End();
             _spriteBatch.Begin(spriteSortMode, blendState, samplerState);
         }
+
         #endregion
 
     }
