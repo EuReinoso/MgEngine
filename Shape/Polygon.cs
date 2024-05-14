@@ -12,16 +12,20 @@ namespace MgEngine.Shape
         #endregion
 
         #region Constructor
-        public Polygon(List<Vector2> vertices)
+        public Polygon(List<Vector2> vertices, bool calculateCenter = true)
         {
             Vertices = vertices;
-            CalculateCenter();
+
+            if (calculateCenter)
+                CalculateCenter();
         }
 
-        public Polygon(Vector2[] vertices)
+        public Polygon(Vector2[] vertices, bool calculateCenter = true)
         {
             Vertices = vertices.ToList();
-            CalculateCenter();
+
+            if (calculateCenter)
+                CalculateCenter();
         }
         #endregion
 
@@ -132,7 +136,7 @@ namespace MgEngine.Shape
             return true;
         }
 
-        public static bool CollidePolygons(List<Vector2> verticesA, List<Vector2> verticesB, out Vector2 normal, out float depth)
+        public static bool CollidePolygon(List<Vector2> verticesA, List<Vector2> verticesB, out Vector2 normal, out float depth)
         {
             normal = Vector2.Zero;
             depth = float.MaxValue;
@@ -207,6 +211,80 @@ namespace MgEngine.Shape
             return CollidePolygon(Vertices, polygon.Vertices, Center, polygon.Center, out normal, out depth);
         }
 
+        public static bool CollideCircleToPolygon(Vector2 circleCenter, float circleRadius,
+                                                    Vector2 polygonCenter, List<Vector2> vertices,
+                                                    out Vector2 normal, out float depth)
+        {
+            normal = Vector2.Zero;
+            depth = float.MaxValue;
+
+            Vector2 axis = Vector2.Zero;
+            float axisDepth = 0f;
+            float minA, maxA, minB, maxB;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector2 va = vertices[i];
+                Vector2 vb = vertices[(i + 1) % vertices.Count];
+
+                Vector2 edge = vb - va;
+                axis = new Vector2(-edge.Y, edge.X);
+                axis = Vector2.Normalize(axis);
+
+                ProjectVertices(vertices, axis, out minA, out maxA);
+                ProjectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
+
+                if (minA >= maxB || minB >= maxA)
+                {
+                    return false;
+                }
+
+                axisDepth = MathF.Min(maxB - minA, maxA - minB);
+
+                if (axisDepth < depth)
+                {
+                    depth = axisDepth;
+                    normal = axis;
+                }
+            }
+
+            int cpIndex = FindClosestPointOnPolygon(circleCenter, vertices);
+            Vector2 cp = vertices[cpIndex];
+
+            axis = cp - circleCenter;
+            axis = Vector2.Normalize(axis);
+
+            ProjectVertices(vertices, axis, out minA, out maxA);
+            ProjectCircle(circleCenter, circleRadius, axis, out minB, out maxB);
+
+            if (minA >= maxB || minB >= maxA)
+            {
+                return false;
+            }
+
+            axisDepth = MathF.Min(maxB - minA, maxA - minB);
+
+            if (axisDepth < depth)
+            {
+                depth = axisDepth;
+                normal = axis;
+            }
+
+            Vector2 direction = polygonCenter - circleCenter;
+
+            if (Vector2.Dot(direction, normal) < 0f)
+            {
+                normal = -normal;
+            }
+
+            return true;
+        }
+
+        public bool CollideCircleToPolygon(Circle circle, out Vector2 normal, out float depth)
+        {
+            return CollideCircleToPolygon(circle.Pos, circle.Radius, Center, Vertices, out normal, out depth);
+        }
+
         #endregion
 
         private static void ProjectVertices(List<Vector2> vertices, Vector2 axis, out float min, out float max)
@@ -222,6 +300,45 @@ namespace MgEngine.Shape
                 if (proj < min) { min = proj; }
                 if (proj > max) { max = proj; }
             }
+        }
+
+        private static void ProjectCircle(Vector2 center, float radius, Vector2 axis, out float min, out float max)
+        {
+            Vector2 direction = Vector2.Normalize(axis);
+            Vector2 directionAndRadius = direction * radius;
+
+            Vector2 p1 = center + directionAndRadius;
+            Vector2 p2 = center - directionAndRadius;
+
+            min = Vector2.Dot(p1, axis);
+            max = Vector2.Dot(p2, axis);
+
+            if (min > max)
+            {
+                float t = min;
+                min = max;
+                max = t;
+            }
+        }
+
+        private static int FindClosestPointOnPolygon(Vector2 circleCenter, List<Vector2> vertices)
+        {
+            int result = -1;
+            float minDistance = float.MaxValue;
+
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                Vector2 v = vertices[i];
+                float distance = Vector2.Distance(v, circleCenter);
+
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    result = i;
+                }
+            }
+
+            return result;
         }
 
         public void Move(Vector2 amount)
