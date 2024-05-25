@@ -4,24 +4,24 @@ using Microsoft.Xna.Framework;
 
 namespace MgEngine.Component
 {
-    public class Box2D : IBox2D
+    public class Box2D : RigidBody, IBox2D
     {
         public Vector2 Pos { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public float Rotation { get; set; }
 
-        public Box2D()
+        public Box2D() : base(ShapeType.Rect)
         {
         }
 
-        public Box2D(float x, float y)
+        public Box2D(float x, float y) : base(ShapeType.Rect)
         {
             X = x;
             Y = y;
         }
 
-        public Box2D(float x, float y, int width, int height)
+        public Box2D(float x, float y, int width, int height) : base(ShapeType.Rect)
         {
             X = x;
             Y = y;

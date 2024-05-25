@@ -16,7 +16,7 @@ namespace MgEngine.Component
         public float Rotation;
         public float RotationVelocity;
         public float Mass;
-        public float Restituition;
+        public float Restitution;
         public float Area;
 
         public bool IsStatic;
@@ -24,15 +24,20 @@ namespace MgEngine.Component
 
         public readonly ShapeType Type;
 
-        public RigidBody(ShapeType type, float rotation = 0, float rotationVelocity = 0, float mass = 50, float restituition = 0, float area = 0, bool isStatic = false)
+        public RigidBody(ShapeType type, float rotation = 0, float rotationVelocity = 0, float mass = 50, float restitution = 1, float area = 0, bool isStatic = false)
         {
             Type = type;
             Rotation = rotation;
             RotationVelocity = rotationVelocity;
             Mass = mass;
-            Restituition = restituition;
+            Restitution = restitution;
             Area = area;
             IsStatic = isStatic;
+        }
+
+        public void AddForce(Vector2 force)
+        {
+            Velocity += force;
         }
     }
 }

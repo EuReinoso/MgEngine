@@ -23,10 +23,6 @@ namespace MgEngine.Shape
         }
 
         #region Properties
-        //public float Left { get { return X; } }
-        //public float Right { get { return X + Width; } }
-        //public float Top { get { return Y; } }
-        //public float Bottom { get { return Y + Height; } }
 
         public float Left { get { return X - Width / 2; } }
         public float Right { get { return X + Width / 2; } }
@@ -88,6 +84,18 @@ namespace MgEngine.Shape
             set
             {
                 base.Rotation = value;
+                CalculateVertices();
+            }
+        }
+
+        public new Vector2 Pos 
+        { 
+            get { return base.Pos; }
+
+            set
+            {
+                base.Pos = value;
+
                 CalculateVertices();
             }
         }

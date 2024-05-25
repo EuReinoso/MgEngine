@@ -35,6 +35,11 @@ namespace MgEngine.Component
             _bodyList.Remove(body);
         }
 
+        public void Clear()
+        {
+            _bodyList.Clear();
+        }
+
         public void Update(float dt)
         {
             for (int i = 0; i < _bodyList.Count - 1; i++)
@@ -43,13 +48,32 @@ namespace MgEngine.Component
 
                 for (int j = i + 1; j < _bodyList.Count; j++)
                 {
+                    UpdateMove(j);
+
                     var b2 = _bodyList[j];
+
+                    if (b1.IsStatic && b2.IsStatic)
+                        continue;
 
                     if (Collide(b1, b2, out Vector2 normal, out float depth))
                     {
-                        Resolve(j, normal * depth / 2);
-                        Resolve(i, -normal * depth / 2);
+                        if (b1.IsStatic)
+                        {
+                            Move(j, normal * depth);
+                        }
+                        else if (b2.IsStatic)
+                        {
+                            Move(i, -normal * depth);
+                        }
+                        else
+                        {
+                            Move(j, normal * depth / 2f);
+                            Move(i, -normal * depth / 2f);
+                        }
+
+                        ResolveCollision(b1, b2, normal * dt);
                     }
+
                 }
             }
         }
@@ -68,6 +92,8 @@ namespace MgEngine.Component
                     return Circle.CollideCircle((Circle)b1, (Circle)b2, out normal, out depth);
                 if (rb2.Type is RigidBody.ShapeType.Polygon)
                     return Polygon.CollideCircleToPolygon((Circle)b1, (Polygon)b2, out normal, out depth);
+                if (rb2.Type is RigidBody.ShapeType.Rect)
+                    return Polygon.CollideCircleToPolygon(((Circle)b1).Pos, ((Circle)b1).Radius, ((Rect)b2).Pos, ((Rect)b2).Vertices.ToList(), out normal, out depth);
             }
 
             if (rb1.Type is RigidBody.ShapeType.Polygon)
@@ -76,12 +102,48 @@ namespace MgEngine.Component
                     return Polygon.CollidePolygon((Polygon)b1, (Polygon)(b2), out normal, out depth);
                 if (rb2.Type is RigidBody.ShapeType.Circle)
                     return Polygon.CollideCircleToPolygon((Circle)b2, (Polygon)b1, out normal, out depth);
+                if (rb2.Type is RigidBody.ShapeType.Rect)
+                    return Polygon.CollidePolygon(((Polygon)b1).Vertices, ((Rect)b2).Vertices.ToList(), out normal, out depth);
+            }
+
+            if (rb1.Type is RigidBody.ShapeType.Rect)
+            {
+                if (rb2.Type is RigidBody.ShapeType.Polygon)
+                    return Polygon.CollidePolygon(((Polygon)b2).Vertices, ((Rect)b1).Vertices.ToList(), out normal, out depth);
+                if (rb2.Type is RigidBody.ShapeType.Circle)
+                {
+                    bool collide = Polygon.CollideCircleToPolygon(((Circle)b2).Pos, ((Circle)b2).Radius, ((Rect)b1).Pos, ((Rect)b1).Vertices.ToList(), out normal, out depth);
+
+                    normal *= -1;
+
+                    return collide;
+                }
+                if (rb2.Type is RigidBody.ShapeType.Rect)
+                    return Polygon.CollidePolygon(((Rect)b1).Vertices.ToList(), ((Rect)b2).Vertices.ToList(), out normal, out depth);
             }
 
             return false;
         }
 
-        private void Resolve(int index, Vector2 movement)
+        public void ResolveCollision(RigidBody b1, RigidBody b2, Vector2 normal)
+        {
+            Vector2 relativeVelocity = b2.Velocity - b1.Velocity;
+
+            if (Vector2.Dot(relativeVelocity, normal) > 0f)
+                return;
+
+            float e = MathF.Min(b1.Restitution, b2.Restitution);
+
+            float j = -(1f + e) * Vector2.Dot(relativeVelocity, normal);
+            j /= b1.Mass + b2.Mass;
+
+            Vector2 impulse = j * normal;
+
+            b1.Velocity -= impulse * b1.Mass;
+            b2.Velocity += impulse * b2.Mass;
+        }
+
+        private void Move(int index, Vector2 movement)
         {
             var rb1 = _bodyList[index];
 
@@ -90,6 +152,23 @@ namespace MgEngine.Component
 
             else if (rb1.Type is RigidBody.ShapeType.Polygon)
                 ((Polygon)_bodyList[index]).Move(movement);
+
+            else if (rb1.Type is RigidBody.ShapeType.Rect)
+                ((Rect)_bodyList[index]).Pos += movement;
+        }
+
+        private void UpdateMove(int index)
+        {
+            var rb1 = _bodyList[index];
+
+            if (rb1.Type is RigidBody.ShapeType.Circle)
+                ((Circle)_bodyList[index]).Pos += rb1.Velocity;
+
+            else if (rb1.Type is RigidBody.ShapeType.Polygon)
+                ((Polygon)_bodyList[index]).Move(rb1.Velocity);
+
+            else if (rb1.Type is RigidBody.ShapeType.Rect)
+                ((Rect)_bodyList[index]).Pos += rb1.Velocity; ;
         }
 
         #endregion

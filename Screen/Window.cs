@@ -50,7 +50,7 @@ namespace MgEngine.Screen
 
         public Vector2 GetCanvasRatio()
         {
-            return new Vector2(Width / Canvas.Width, Height / Canvas.Height);
+            return new Vector2((float)Canvas.Width / (float)Width, (float)Canvas.Height / (float)Height);
         }
 
         public void SetCamera(Camera camera)
