@@ -4,8 +4,14 @@ namespace MgEngine.Component
 {
     public class RigidBody
     {
+        public enum ShapeType
+        {
+            Rect,
+            Circle,
+            Polygon
+        }
+
         public Vector2 Velocity;
-        public Vector2 Pos;
 
         public float Rotation;
         public float RotationVelocity;
@@ -14,10 +20,13 @@ namespace MgEngine.Component
         public float Area;
 
         public bool IsStatic;
+        public bool IsBody;
 
-        public RigidBody(Vector2 pos, float rotation = 0, float rotationVelocity = 0, float mass = 50, float restituition = 0, float area = 0, bool isStatic = false)
+        public readonly ShapeType Type;
+
+        public RigidBody(ShapeType type, float rotation = 0, float rotationVelocity = 0, float mass = 50, float restituition = 0, float area = 0, bool isStatic = false)
         {
-            Pos = pos;
+            Type = type;
             Rotation = rotation;
             RotationVelocity = rotationVelocity;
             Mass = mass;

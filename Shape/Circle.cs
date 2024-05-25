@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MgEngine.Component;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace MgEngine.Shape
 {
-    public class Circle
+    public class Circle : RigidBody
     {
         #region Variables
         private Vector2[] _vertices;
@@ -15,7 +16,7 @@ namespace MgEngine.Shape
         #endregion
 
         #region Constructor
-        public Circle(float x, float y, float radius, int points = 10)
+        public Circle(float x, float y, float radius, int points = 10) : base(ShapeType.Circle)
         {
             _pos =  new Vector2(x, y);
             _radius = radius;
@@ -134,6 +135,11 @@ namespace MgEngine.Shape
             depth = radiusSum - distance;
 
             return true;
+        }
+
+        public static bool CollideCircle(Circle c1,  Circle c2, out Vector2 normal, out float depth)
+        {
+            return c1.CollideCircle(c2, out normal, out depth);
         }
 
         #endregion

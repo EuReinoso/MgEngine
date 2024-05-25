@@ -1,9 +1,10 @@
-﻿using MgEngine.Util;
+﻿using MgEngine.Component;
+using MgEngine.Util;
 using Microsoft.Xna.Framework;
 
 namespace MgEngine.Shape
 {
-    public class Polygon
+    public class Polygon : RigidBody
     {
         #region Variables
         public List<Vector2> Vertices;
@@ -12,7 +13,7 @@ namespace MgEngine.Shape
         #endregion
 
         #region Constructor
-        public Polygon(List<Vector2> vertices, bool calculateCenter = true)
+        public Polygon(List<Vector2> vertices, bool calculateCenter = true) : base(ShapeType.Polygon)
         {
             Vertices = vertices;
 
@@ -20,7 +21,7 @@ namespace MgEngine.Shape
                 CalculateCenter();
         }
 
-        public Polygon(Vector2[] vertices, bool calculateCenter = true)
+        public Polygon(Vector2[] vertices, bool calculateCenter = true) : base(ShapeType.Polygon)
         {
             Vertices = vertices.ToList();
 
@@ -42,6 +43,16 @@ namespace MgEngine.Shape
                 {
                     Vertices[i] = MgMath.RotateVectorCenter(Vertices[i], Center, _rotation);
                 }
+            }
+        }
+
+        public Vector2 Pos
+        {
+            get { return Center; }
+
+            set
+            {
+                Move(value);
             }
         }
 
@@ -206,14 +217,17 @@ namespace MgEngine.Shape
             return true;
         }
 
+        public static bool CollidePolygon(Polygon polygon1, Polygon polygon2, out Vector2 normal, out float depth)
+        {
+            return polygon1.CollidePolygon(polygon2, out normal, out depth);
+        }
+
         public bool CollidePolygon(Polygon polygon, out Vector2 normal, out float depth)
         {
             return CollidePolygon(Vertices, polygon.Vertices, Center, polygon.Center, out normal, out depth);
         }
 
-        public static bool CollideCircleToPolygon(Vector2 circleCenter, float circleRadius,
-                                                    Vector2 polygonCenter, List<Vector2> vertices,
-                                                    out Vector2 normal, out float depth)
+        public static bool CollideCircleToPolygon(Vector2 circleCenter, float circleRadius, Vector2 polygonCenter, List<Vector2> vertices, out Vector2 normal, out float depth)
         {
             normal = Vector2.Zero;
             depth = float.MaxValue;
@@ -278,6 +292,11 @@ namespace MgEngine.Shape
             }
 
             return true;
+        }
+
+        public static bool CollideCircleToPolygon(Circle circle, Polygon polygon, out Vector2 normal, out float depth)
+        {
+            return CollideCircleToPolygon(circle.Pos, circle.Radius, polygon.Center, polygon.Vertices, out normal, out depth);
         }
 
         public bool CollideCircleToPolygon(Circle circle, out Vector2 normal, out float depth)
