@@ -12,7 +12,8 @@ namespace MgEngine.Component
     public class Physics
     {
         #region Variables
-        public float Gravity = 10;
+        public Vector2 Gravity;
+        public bool IsGravityOn;
 
         private List<RigidBody> _bodyList;
         #endregion
@@ -21,6 +22,9 @@ namespace MgEngine.Component
         public Physics()
         {
             _bodyList = new List<RigidBody>();
+
+            this.Gravity = new Vector2(0, 9.81f);
+            this.IsGravityOn = true;
         }
         #endregion
 
@@ -42,15 +46,20 @@ namespace MgEngine.Component
 
         public void Update(float dt)
         {
+            for (int i = 0; i < _bodyList.Count; i++)
+            {
+                UpdateMove(i, 1);
+                if (!_bodyList[i].IsStatic && IsGravityOn)
+                    _bodyList[i].Velocity += this.Gravity * _bodyList[i].Mass * 1;
+            }
+
             for (int i = 0; i < _bodyList.Count - 1; i++)
             {
-                var b1 = _bodyList[i];
+                RigidBody b1 = _bodyList[i];
 
                 for (int j = i + 1; j < _bodyList.Count; j++)
                 {
-                    UpdateMove(j);
-
-                    var b2 = _bodyList[j];
+                    RigidBody b2 = _bodyList[j];
 
                     if (b1.IsStatic && b2.IsStatic)
                         continue;
@@ -58,20 +67,16 @@ namespace MgEngine.Component
                     if (Collide(b1, b2, out Vector2 normal, out float depth))
                     {
                         if (b1.IsStatic)
-                        {
                             Move(j, normal * depth);
-                        }
                         else if (b2.IsStatic)
-                        {
                             Move(i, -normal * depth);
-                        }
                         else
                         {
-                            Move(j, normal * depth / 2f);
-                            Move(i, -normal * depth / 2f);
+                            Move(j, normal * depth);
+                            Move(i, -normal * depth);
                         }
 
-                        ResolveCollision(b1, b2, normal * dt);
+                        ResolveCollision(b1, b2, normal);
                     }
 
                 }
@@ -135,12 +140,12 @@ namespace MgEngine.Component
             float e = MathF.Min(b1.Restitution, b2.Restitution);
 
             float j = -(1f + e) * Vector2.Dot(relativeVelocity, normal);
-            j /= b1.Mass + b2.Mass;
+            j /= (1 / b1.Mass) + (1 / b2.Mass);
 
             Vector2 impulse = j * normal;
 
-            b1.Velocity -= impulse * b1.Mass;
-            b2.Velocity += impulse * b2.Mass;
+            b1.Velocity -= impulse * (1 / b1.Mass);
+            b2.Velocity += impulse * (1 / b2.Mass);
         }
 
         private void Move(int index, Vector2 movement)
@@ -157,18 +162,21 @@ namespace MgEngine.Component
                 ((Rect)_bodyList[index]).Pos += movement;
         }
 
-        private void UpdateMove(int index)
+        private void UpdateMove(int index, float dt)
         {
             var rb1 = _bodyList[index];
 
+            if (rb1.IsStatic)
+                return;
+
             if (rb1.Type is RigidBody.ShapeType.Circle)
-                ((Circle)_bodyList[index]).Pos += rb1.Velocity;
+                ((Circle)_bodyList[index]).Pos += rb1.Velocity * dt;
 
             else if (rb1.Type is RigidBody.ShapeType.Polygon)
-                ((Polygon)_bodyList[index]).Move(rb1.Velocity);
+                ((Polygon)_bodyList[index]).Move(rb1.Velocity * dt);
 
             else if (rb1.Type is RigidBody.ShapeType.Rect)
-                ((Rect)_bodyList[index]).Pos += rb1.Velocity; ;
+                ((Rect)_bodyList[index]).Pos += rb1.Velocity * dt;
         }
 
         #endregion

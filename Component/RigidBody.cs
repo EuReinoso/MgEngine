@@ -24,7 +24,7 @@ namespace MgEngine.Component
 
         public readonly ShapeType Type;
 
-        public RigidBody(ShapeType type, float rotation = 0, float rotationVelocity = 0, float mass = 50, float restitution = 1, float area = 0, bool isStatic = false)
+        public RigidBody(ShapeType type, float rotation = 0, float rotationVelocity = 0, float mass = .02f, float restitution = 0.3f, float area = 0, bool isStatic = false)
         {
             Type = type;
             Rotation = rotation;
