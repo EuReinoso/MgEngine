@@ -44,41 +44,49 @@ namespace MgEngine.Component
             _bodyList.Clear();
         }
 
-        public void Update(float dt)
+        /// <summary>
+        /// Update Physics Collision and movement.
+        /// </summary>
+        /// <param name="dt">DeltaTime</param>
+        /// <param name="precision">Precision of Colissions, 1 is te lowest. More precision means slow down the run time.</param>
+        public void Update(float dt, int precision = 5)
         {
-            for (int i = 0; i < _bodyList.Count; i++)
+            for (int t = 0; t < precision; t++)
             {
-                UpdateMove(i, 1);
-                if (!_bodyList[i].IsStatic && IsGravityOn)
-                    _bodyList[i].Velocity += this.Gravity * _bodyList[i].Mass * 1;
-            }
-
-            for (int i = 0; i < _bodyList.Count - 1; i++)
-            {
-                RigidBody b1 = _bodyList[i];
-
-                for (int j = i + 1; j < _bodyList.Count; j++)
+                for (int i = 0; i < _bodyList.Count; i++)
                 {
-                    RigidBody b2 = _bodyList[j];
+                    UpdateMove(i, dt, precision);
+                    if (!_bodyList[i].IsStatic && IsGravityOn)
+                        _bodyList[i].Velocity += this.Gravity * _bodyList[i].Mass /precision;
+                }
 
-                    if (b1.IsStatic && b2.IsStatic)
-                        continue;
+                for (int i = 0; i < _bodyList.Count - 1; i++)
+                {
+                    RigidBody b1 = _bodyList[i];
 
-                    if (Collide(b1, b2, out Vector2 normal, out float depth))
+                    for (int j = i + 1; j < _bodyList.Count; j++)
                     {
-                        if (b1.IsStatic)
-                            Move(j, normal * depth);
-                        else if (b2.IsStatic)
-                            Move(i, -normal * depth);
-                        else
+                        RigidBody b2 = _bodyList[j];
+
+                        if (b1.IsStatic && b2.IsStatic)
+                            continue;
+
+                        if (Collide(b1, b2, out Vector2 normal, out float depth))
                         {
-                            Move(j, normal * depth);
-                            Move(i, -normal * depth);
+                            if (b1.IsStatic)
+                                Move(j, normal * depth);
+                            else if (b2.IsStatic)
+                                Move(i, -normal * depth);
+                            else
+                            {
+                                Move(j, normal * depth);
+                                Move(i, -normal * depth);
+                            }
+
+                            ResolveCollision(b1, b2, normal);
                         }
 
-                        ResolveCollision(b1, b2, normal);
                     }
-
                 }
             }
         }
@@ -162,7 +170,7 @@ namespace MgEngine.Component
                 ((Rect)_bodyList[index]).Pos += movement;
         }
 
-        private void UpdateMove(int index, float dt)
+        private void UpdateMove(int index, float dt, int precision)
         {
             var rb1 = _bodyList[index];
 
@@ -170,13 +178,13 @@ namespace MgEngine.Component
                 return;
 
             if (rb1.Type is RigidBody.ShapeType.Circle)
-                ((Circle)_bodyList[index]).Pos += rb1.Velocity * dt;
+                ((Circle)_bodyList[index]).Pos += rb1.Velocity * dt / (float)precision;
 
             else if (rb1.Type is RigidBody.ShapeType.Polygon)
-                ((Polygon)_bodyList[index]).Move(rb1.Velocity * dt);
+                ((Polygon)_bodyList[index]).Move(rb1.Velocity * dt / (float)precision);
 
             else if (rb1.Type is RigidBody.ShapeType.Rect)
-                ((Rect)_bodyList[index]).Pos += rb1.Velocity * dt;
+                ((Rect)_bodyList[index]).Pos += rb1.Velocity * dt / (float)precision;
         }
 
         #endregion

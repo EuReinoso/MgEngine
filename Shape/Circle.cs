@@ -81,6 +81,7 @@ namespace MgEngine.Shape
             set 
             {
                 _pos = value;
+
                 CalculateVertices();
             }
         }
@@ -131,7 +132,11 @@ namespace MgEngine.Shape
                 return false;
             }
 
-            normal = Vector2.Normalize(circle.Pos - _pos);
+            if (distance == 0)
+                normal = Vector2.UnitY; //arbitrary direction when pos1 = pos2
+            else
+                normal = Vector2.Normalize(circle.Pos - _pos);
+
             depth = radiusSum - distance;
 
             return true;
