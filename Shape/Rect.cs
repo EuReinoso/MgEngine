@@ -117,6 +117,11 @@ namespace MgEngine.Shape
             }
         }
 
+        public bool IsCollidePoint(Vector2 point)
+        {
+            return (Left <= point.X && Right >= point.X && Top <= point.Y && Bottom >= point.Y);
+        }
+
 
 
     }

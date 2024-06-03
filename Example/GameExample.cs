@@ -15,7 +15,7 @@ namespace GameExample
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private ShapeBatch _shapeBatch;
-        private Font _font;
+        private FontGroup _font;
 
         private Window _window;
         private Camera _camera;

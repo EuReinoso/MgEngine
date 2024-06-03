@@ -1,15 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
 namespace MgEngine.Font
 {
-    public class Font
+    public class FontGroup
     {
         private Dictionary<int, SpriteFont> _spriteFonts;
 
-        public Font(ContentManager content, string path, List<int> sizes)
+        public FontGroup(ContentManager content, string path, List<int> sizes)
         {
             _spriteFonts = new();
 

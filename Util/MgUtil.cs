@@ -31,5 +31,16 @@ namespace MgEngine.Util
         {
             return new Vector2(new Random().Next(minX, maxX), new Random().Next(minY, maxY));
         }
+
+        public static Color ColorLight(Color color, float factor)
+        {
+            factor = MgMath.Clamp(factor, 0f, 1f);
+
+            int red = (int)(color.R * factor);
+            int green = (int)(color.G * factor);
+            int blue = (int)(color.B * factor);
+
+            return new Color(color.A, red, green, blue);
+        }
     }
 }
