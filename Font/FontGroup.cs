@@ -21,8 +21,12 @@ namespace MgEngine.Font
 
         public void DrawText(SpriteBatch spriteBatch, string text, Vector2 Pos, int size, Color color, float rotation = 0)
         {
-
             spriteBatch.DrawString(_spriteFonts[size], text, Pos, color, rotation, new Vector2(0, 0), 1, SpriteEffects.None, 1);
+        }
+
+        public Vector2 MeasureString(string text, int size)
+        {
+            return _spriteFonts[size].MeasureString(text);
         }
 
     }

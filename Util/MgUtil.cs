@@ -40,7 +40,8 @@ namespace MgEngine.Util
             int green = (int)(color.G * factor);
             int blue = (int)(color.B * factor);
 
-            return new Color(color.A, red, green, blue);
+            return new Color(red, green, blue, color.A);
         }
+
     }
 }

@@ -1,15 +1,12 @@
 ﻿using MgEngine.Component;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using static MgEngine.UI.UITypes;
+using MgEngine.Input;
 
 namespace MgEngine.UI
 {
-    public class UIComponent : Entity
+    public abstract class UIComponent : Entity
     {
         public Visibility Visibility = Visibility.Visible;
         public bool IsEnabled = true;
@@ -24,5 +21,7 @@ namespace MgEngine.UI
         {
 
         }
+
+        public abstract void Update(Inputter inputter);
     }
 }

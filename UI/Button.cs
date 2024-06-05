@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using MgEngine.Font;
 using MgEngine.Util;
+using MgEngine.Shape;
 
 namespace MgEngine.UI
 {
@@ -10,6 +11,7 @@ namespace MgEngine.UI
     {
         private bool _isPressed;
         private Color _buttonColor;
+        private bool _isHover;
 
         public FontGroup Font;
         public string Text = "Button";
@@ -31,6 +33,8 @@ namespace MgEngine.UI
 
         public bool IsPressed { get {  return _isPressed; } }
 
+        public bool IsHover { get { return _isHover; } }
+
         public Color ButtonColor 
         { 
             get { return _buttonColor; }
@@ -43,32 +47,32 @@ namespace MgEngine.UI
             }
         }
 
-        public bool IsHover(Inputter inputter)
-        {
-            return Rect.IsCollidePoint(inputter.GetMousePos());
-        }
+        public event Action? OnClick;
 
-        public bool IsClickDown(Inputter inputter)
+        public override void Update(Inputter inputter)
         {
-            if (IsHover(inputter) && inputter.IsMouseLeftDown())
-            {
+            _isHover = Rect.IsCollidePoint(inputter.GetMousePos());
+
+            if (_isHover && inputter.IsMouseLeftDown())
                 _isPressed = true;
-                return true;
-            }
+            else
+                _isPressed = false;
 
-            _isPressed = false;
-            return false;
+            if (_isHover && inputter.MouseLeftDown())
+                OnClick?.Invoke();
         }
 
-        public new void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0, Color? color = null)
+        public new void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
         {
-            Color btnColor = color ?? (_isPressed == true ? PressedColor : ButtonColor);
+            ColorEffect = _isPressed == true ? PressedColor : ButtonColor;
 
-            btnColor = color ?? btnColor;
+            base.Draw(spriteBatch, scrollX, scrollY);
 
-            base.Draw(spriteBatch, scrollX, scrollY, btnColor);
+            var text = new TextWrap(Font, FontSize, Text, Width * 0.8f);
 
-            Font.DrawText(spriteBatch, Text, Pos, FontSize, FontColor);
+            Vector2 measure = Font.MeasureString(text.WrapText, FontSize);
+
+            Font.DrawText(spriteBatch, text.WrapText, Pos - measure / 2, FontSize, FontColor);
         }
 
     }
