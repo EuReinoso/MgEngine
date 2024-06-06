@@ -11,14 +11,13 @@ namespace MgEngine.Component
             Polygon
         }
 
-        public Vector2 Velocity;
+        public Vector2 Velocity { get; set; }
+        public float Rotation { get; set; }
+        public float RotationVelocity { get; set; }
+        public float Mass { get; set; }
+        public float Restitution { get; set; }
 
-        public float Rotation;
-        public float RotationVelocity;
-        public float Mass;
-        public float Restitution;
-
-        public bool IsStatic;
+        public bool IsStatic { get; set; }
 
         public readonly ShapeType Type;
 

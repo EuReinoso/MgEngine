@@ -12,23 +12,24 @@ namespace MgEngine.Font
     {
         private string _text;
         private string _wrapText;
+        private float _maxWidth;
+        private HorizontalAlign _textAlign;
+        private FontGroup _font;
+        private int _fontSize;
 
-        public FontGroup Font { get; set; }
-        public int FontSize { get; set; }
-        public float MaxWidth { get; set; }
-        public HorizontalAlign TextAlign { get; set; }
 
         public TextWrap(FontGroup font, int fontSize, string text, float maxWidth, HorizontalAlign textAlign = HorizontalAlign.Center)
         {
-            Font = font;
-            FontSize = fontSize;
+            _font = font;
             _text = text;
-            MaxWidth = maxWidth;
-            TextAlign = textAlign;
+            _fontSize = fontSize;
+            _maxWidth = maxWidth;
+            _textAlign = textAlign;
 
             Measure();
         }
 
+        #region Properties
         public string Text
         {
             get { return _text; }
@@ -40,10 +41,37 @@ namespace MgEngine.Font
             }
         }
 
+        public float MaxWidth
+        {
+            get { return _maxWidth; }
+
+            set { _maxWidth= value;  Measure(); }
+        }
+
+        public HorizontalAlign TextAlign 
+        {
+            get { return _textAlign; } 
+
+            set { _textAlign = value; Measure(); }
+        }
+
+        public FontGroup Font
+        {
+            get { return _font; }
+            set { _font = value; }
+        }
+
+        public int FontSize
+        {
+            get { return _fontSize; }
+            set { _fontSize = value; }
+        }
+
         public string WrapText 
         {
             get { return _wrapText; }
         }
+        #endregion
 
 
         private void Measure()

@@ -10,6 +10,7 @@ namespace MgEngine.Component
     {
         protected Texture2D _texture;
         protected Rectangle _sourceRectangle;
+
         public Color ColorEffect { get; set; }
         
         #region Constructor

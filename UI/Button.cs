@@ -15,11 +15,13 @@ namespace MgEngine.UI
         private Color _buttonColor;
         private bool _isHover;
 
-        public FontGroup Font;
+        private TextWrap _textWrap;
+        private FontGroup _font;
+        private string _text;
+        private HorizontalAlign _textAlign;
+        private int _fontSize;
+
         public Color PressedColor { get; set; }
-        public string Text { get; set; }
-        public HorizontalAlign TextAlign { get; set; }
-        public int FontSize { get; set; }
         public Color FontColor { get; set; }
 
         public Button() : base(MgDefault.ButtonTexture)
@@ -34,13 +36,48 @@ namespace MgEngine.UI
 
         private void Initialize()
         {
-            Font = MgDefault.Font;
+            _font = MgDefault.Font;
+            _textAlign = HorizontalAlign.Center;
+            _fontSize = 11;
+            _text = "Button";
             ButtonColor = Color.White;
-            TextAlign = HorizontalAlign.Center;
-            FontSize = 11;
             FontColor = Color.Black;
-            Text = "Button";
+
+            _textWrap = new(Font, FontSize, Text, Width * 0.8f, TextAlign);
         }
+
+        #region Properties
+        public FontGroup Font
+        {
+            get { return _font; }
+            set { _font = value; _textWrap.Font = value; }
+        }
+
+        public string Text
+        {
+            get { return _text; }
+            set { _text = value; _textWrap.Text = value; }
+        }
+
+        public HorizontalAlign TextAlign
+        {
+            get { return _textAlign; }
+            set { _textAlign = value; _textWrap.TextAlign = value; }
+        }
+
+        public int FontSize
+        {
+            get { return _fontSize; }
+            set { _fontSize = value; _textWrap.FontSize = value; }
+        }
+
+        public new int Width
+        {
+            get { return base.Width; }
+
+            set { base.Width = value; _textWrap.MaxWidth = value * 0.8f; }
+        }
+
 
         public bool IsPressed { get {  return _isPressed; } }
 
@@ -57,6 +94,8 @@ namespace MgEngine.UI
                 PressedColor = MgUtil.ColorLight(_buttonColor, 0.8f);
             }
         }
+
+        #endregion
 
         public event Action? OnClick;
 
@@ -79,11 +118,9 @@ namespace MgEngine.UI
 
             base.Draw(spriteBatch, scrollX, scrollY);
 
-            var text = new TextWrap(Font, FontSize, Text, Width * 0.8f, TextAlign);
+            Vector2 measure = Font.MeasureString(_textWrap.WrapText, FontSize);
 
-            Vector2 measure = Font.MeasureString(text.WrapText, FontSize);
-
-            Font.DrawText(spriteBatch, text.WrapText, Pos - measure / 2, FontSize, FontColor);
+            Font.DrawText(spriteBatch, _textWrap.WrapText, Pos - measure / 2, FontSize, FontColor);
         }
 
     }
