@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using MgEngine.Shape;
 using System;
 
+#pragma warning disable CS8618
 namespace MgEngine.Component
 {
     public class Entity : Box2D
     {
         protected Texture2D _texture;
         protected Rectangle _sourceRectangle;
-        public Color ColorEffect = Color.White;
+        public Color ColorEffect { get; set; }
         
         #region Constructor
         public Entity(Texture2D texture)
@@ -19,11 +20,13 @@ namespace MgEngine.Component
 
             Width = texture.Width;
             Height = texture.Height;
+
+            ColorEffect = Color.White;
         }
 
         protected Entity()
         {
-
+            ColorEffect = Color.White;
         }
         #endregion
 

@@ -15,5 +15,12 @@ namespace MgEngine.UI
             Collapse
         }
 
+        public enum HorizontalAlign
+        {
+            Left,
+            Center,
+            Right
+        }
+
     }
 }

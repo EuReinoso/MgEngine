@@ -4,7 +4,9 @@ using Microsoft.Xna.Framework;
 using MgEngine.Font;
 using MgEngine.Util;
 using MgEngine.Shape;
+using static MgEngine.UI.UITypes;
 
+#pragma warning disable CS8618
 namespace MgEngine.UI
 {
     public class Button : UIComponent
@@ -14,21 +16,30 @@ namespace MgEngine.UI
         private bool _isHover;
 
         public FontGroup Font;
-        public string Text = "Button";
-        public int FontSize = 11;
-        public Color FontColor = Color.Black;
-        public Color PressedColor;
+        public Color PressedColor { get; set; }
+        public string Text { get; set; }
+        public HorizontalAlign TextAlign { get; set; }
+        public int FontSize { get; set; }
+        public Color FontColor { get; set; }
 
         public Button() : base(MgDefault.ButtonTexture)
         {
-            Font = MgDefault.Font;
-            ButtonColor = Color.White;
+            Initialize();
         }
 
         public Button(Texture2D texture) : base(texture)
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             Font = MgDefault.Font;
             ButtonColor = Color.White;
+            TextAlign = HorizontalAlign.Center;
+            FontSize = 11;
+            FontColor = Color.Black;
+            Text = "Button";
         }
 
         public bool IsPressed { get {  return _isPressed; } }
@@ -68,7 +79,7 @@ namespace MgEngine.UI
 
             base.Draw(spriteBatch, scrollX, scrollY);
 
-            var text = new TextWrap(Font, FontSize, Text, Width * 0.8f);
+            var text = new TextWrap(Font, FontSize, Text, Width * 0.8f, TextAlign);
 
             Vector2 measure = Font.MeasureString(text.WrapText, FontSize);
 

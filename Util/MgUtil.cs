@@ -2,6 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 
 namespace MgEngine.Util
 {
@@ -42,6 +46,40 @@ namespace MgEngine.Util
 
             return new Color(red, green, blue, color.A);
         }
+
+
+#pragma warning disable CS8602
+#pragma warning disable CS8600
+        public static T DeepCopy<T>(this T originalObject) where T : new()
+        {
+            if (originalObject == null)
+                return new T();
+
+            var type = originalObject.GetType();
+
+            if (type == null)
+                return new T();
+
+            var properties = type.GetProperties();
+
+            T clonedObj = (T)Activator.CreateInstance(type);
+
+            foreach (var property in properties)
+            {
+                if (property.CanWrite)
+                {
+                    object value = property.GetValue(originalObject);
+                    if (value != null && value.GetType().IsClass && !value.GetType().FullName.StartsWith("System."))
+                        property.SetValue(clonedObj, DeepCopy(value));
+                    else
+                        property.SetValue(clonedObj, value);
+                }
+            }
+
+            return clonedObj ?? new T();
+        }
+#pragma warning restore CS8602
+#pragma warning restore CS8600
 
     }
 }

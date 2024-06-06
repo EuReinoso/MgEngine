@@ -3,23 +3,28 @@ using MgEngine.Shape;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
+using static MgEngine.UI.UITypes;
 
+#pragma warning disable CS8618
 namespace MgEngine.Font
 {
     public class TextWrap
     {
-        public FontGroup Font;
-        public int FontSize;
         private string _text;
-        public float MaxWidth;
         private string _wrapText;
 
-        public TextWrap(FontGroup font, int fontSize, string text, float maxWidth)
+        public FontGroup Font { get; set; }
+        public int FontSize { get; set; }
+        public float MaxWidth { get; set; }
+        public HorizontalAlign TextAlign { get; set; }
+
+        public TextWrap(FontGroup font, int fontSize, string text, float maxWidth, HorizontalAlign textAlign = HorizontalAlign.Center)
         {
             Font = font;
             FontSize = fontSize;
             _text = text;
             MaxWidth = maxWidth;
+            TextAlign = textAlign;
 
             Measure();
         }
@@ -58,12 +63,11 @@ namespace MgEngine.Font
                 if (lineWidth + size.X < MaxWidth)
                 {
                     line += word + " ";
-                    //sb.Append(word + " ");
                     lineWidth += size.X + spaceWidth;
                 }
                 else
                 {
-                    line = TextAlign(line, lineWidth + size.X, spaceWidth);
+                    line = GetTextAlign(line, lineWidth, spaceWidth);
 
                     sb.Append(line + "\n");
                     line = word + " ";
@@ -72,7 +76,7 @@ namespace MgEngine.Font
 
                 if (count == words.Length - 1)
                 {
-                    line = TextAlign(line, lineWidth + size.X, spaceWidth);
+                    line = GetTextAlign(line, lineWidth, spaceWidth);
                     sb.Append(line);
                 }
 
@@ -82,44 +86,31 @@ namespace MgEngine.Font
             _wrapText = sb.ToString();
         }
 
-        private string TextAlign(string text, float textWidth, float spaceWidth)
+        private string GetTextAlign(string text, float textWidth, float spaceWidth)
         {
             float totalWidth = textWidth;
 
             while(totalWidth < MaxWidth)
             {
-                text = " " + text + " ";
-                totalWidth += spaceWidth;
+                if (TextAlign == HorizontalAlign.Center)
+                {
+                    text = " " + text + " ";
+                    totalWidth += spaceWidth * 2;
+                }
+                else if (TextAlign == HorizontalAlign.Left)
+                {
+                    text = text + " ";
+                    totalWidth += spaceWidth;
+                }
+                else if (TextAlign == HorizontalAlign.Right)
+                {
+                    text = " " + text;
+                    totalWidth += spaceWidth;
+                }
             }
 
             return text;
         }
-
-        //private void Measure()
-        //{
-        //    string[] words = Text.Split(' ');
-        //    StringBuilder sb = new StringBuilder();
-        //    float lineWidth = 0f;
-        //    float spaceWidth = Font.MeasureString(" ", FontSize).X;
-
-        //    foreach (string word in words)
-        //    {
-        //        Vector2 size = Font.MeasureString(word, FontSize);
-
-        //        if (lineWidth + size.X < MaxWidth)
-        //        {
-        //            sb.Append(word + " ");
-        //            lineWidth += size.X + spaceWidth;
-        //        }
-        //        else
-        //        {
-        //            sb.Append("\n" + word + " ");
-        //            lineWidth = size.X + spaceWidth;
-        //        }
-        //    }
-
-        //    _wrapText = sb.ToString();
-        //}
 
     }
 }
