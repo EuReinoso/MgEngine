@@ -9,7 +9,7 @@ using static MgEngine.UI.UITypes;
 #pragma warning disable CS8618
 namespace MgEngine.UI
 {
-    public class Button : UIComponent
+    public class Button : Widget
     {
         private bool _isPressed;
         private Color _buttonColor;
@@ -38,7 +38,7 @@ namespace MgEngine.UI
         {
             _font = MgDefault.Font;
             _textAlign = HorizontalAlign.Center;
-            _fontSize = 11;
+            _fontSize = MgDefault.FontSize;
             _text = "Button";
             ButtonColor = Color.White;
             FontColor = Color.Black;
@@ -103,6 +103,9 @@ namespace MgEngine.UI
         {
             _isHover = Rect.IsCollidePoint(inputter.GetMousePos());
 
+            if (!IsEnabled)
+                return;
+
             if (_isHover && inputter.IsMouseLeftDown())
                 _isPressed = true;
             else
@@ -112,9 +115,12 @@ namespace MgEngine.UI
                 OnClick?.Invoke();
         }
 
-        public new void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
+        public override void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
         {
-            ColorEffect = _isPressed == true ? PressedColor : ButtonColor;
+            if (IsEnabled)
+                ColorEffect = _isPressed == true ? PressedColor : ButtonColor;
+            else
+                ColorEffect = DisabledColor;
 
             base.Draw(spriteBatch, scrollX, scrollY);
 

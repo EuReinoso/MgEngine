@@ -22,5 +22,24 @@ namespace MgEngine.UI
             Right
         }
 
+        public enum VerticalAlign
+        {
+            Top,
+            Center,
+            Bottom
+        }
+
+        public enum Orientation
+        {
+            Horizontal,
+            Vertical
+        }
+
+        public enum SizeMode
+        {
+            Auto,
+            Fixed
+        }
+
     }
 }

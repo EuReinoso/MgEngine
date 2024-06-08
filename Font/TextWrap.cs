@@ -95,7 +95,7 @@ namespace MgEngine.Font
                 }
                 else
                 {
-                    line = GetTextAlign(line, lineWidth, spaceWidth);
+                    line = GetTextAlign(line, lineWidth - spaceWidth, spaceWidth);
 
                     sb.Append(line + "\n");
                     line = word + " ";

@@ -60,6 +60,7 @@ namespace MgEngine.Input
 
         public Vector2 GetMousePos()
         {
+            //ToDo: Fix MousePos when Window / Canvas is not proporcional
             Vector2 ratio = _window.GetCanvasRatio();
 
             return new Vector2(_mouseState.X * ratio.X, _mouseState.Y * ratio.Y);

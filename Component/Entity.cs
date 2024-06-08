@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MgEngine.Shape;
 using System;
+using MgEngine.Util;
 
 #pragma warning disable CS8618
 namespace MgEngine.Component
@@ -23,17 +24,21 @@ namespace MgEngine.Component
             Height = texture.Height;
 
             ColorEffect = Color.White;
+
+            ResizeScale(MgDefault.Scale);
         }
 
         protected Entity()
         {
             ColorEffect = Color.White;
+
+            ResizeScale(MgDefault.Scale);
         }
         #endregion
 
         public Vector2 SourceCenter { get { return new Vector2(_sourceRectangle.Width / 2, _sourceRectangle.Height / 2); } }
 
-        public void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
+        public virtual void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
         {
             if (_texture == null)
                 throw new Exception("Texture was null, you have to Add a Texture to start Animation");

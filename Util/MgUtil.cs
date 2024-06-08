@@ -47,6 +47,15 @@ namespace MgEngine.Util
             return new Color(red, green, blue, color.A);
         }
 
+        public static Color ColorAlpha(Color color, float factor)
+        {
+            factor = MgMath.Clamp(factor, 0f, 1f);
+
+            byte newAlpha = (byte)(color.A * factor);
+
+            return new Color(color.R, color.G, color.B, newAlpha);
+        }
+
 
 #pragma warning disable CS8602
 #pragma warning disable CS8600
