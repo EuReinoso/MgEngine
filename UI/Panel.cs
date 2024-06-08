@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ namespace MgEngine.UI
 
         public override void Update(Inputter inputter)
         {
-            CalculatePositions();
+            AlocateWidgets();
 
             foreach(var widget in _widgets)
             {
@@ -76,47 +77,95 @@ namespace MgEngine.UI
                 widget.Draw(spriteBatch, scrollX, scrollY);
             }
         }
-
-        private void CalculatePositions()
+        
+        private void AlocateWidgets()
         {
-            float xAbs = Rect.Left;
-            float yAbs = Rect.Top;
+            bool disableCenter = (HorizontalAlign == HorizontalAlign.Center && Orientation == Orientation.Horizontal);
 
-            int widthAbs = 0;
-            int heightAbs = 0;
+            float x = 0;
+            if (HorizontalAlign == HorizontalAlign.Left || disableCenter)
+                x = Rect.Left;
+            else if (HorizontalAlign == HorizontalAlign.Right)
+                x = Rect.Right;
+            else if (HorizontalAlign == HorizontalAlign.Center)
+                x = Rect.X;
 
-            foreach(var widget in _widgets)
+            float y = 0;
+            if (VerticalAlign == VerticalAlign.Top)
+                y = Rect.Top;
+            else if (VerticalAlign == VerticalAlign.Bottom)
+                y = Rect.Bottom;
+
+            int width = 0;
+            int height = 0;
+
+            List<Widget> widgetList = ReverseByOrientation(_widgets, disableCenter);
+
+            foreach (var widget in widgetList)
             {
-                widget.X = xAbs + widget.Margin.Left + widget.Width / 2;
-                widget.Y = yAbs + widget.Margin.Top + widget.Height / 2;
+                CalculateWidgetPosition(disableCenter, x, y, widget);
 
                 if (Orientation == Orientation.Horizontal)
                 {
-                    xAbs += widget.Width + widget.Margin.Left;
+                    if (HorizontalAlign == HorizontalAlign.Left || disableCenter)
+                        x += widget.Width + widget.Margin.Left;
+                    else if (HorizontalAlign == HorizontalAlign.Right)
+                        x -= widget.Width + widget.Margin.Left;
 
-                    widthAbs += widget.Width + widget.Margin.Width;
+                    width += widget.Width + widget.Margin.Width;
 
-                    if (widget.Height + widget.Margin.Height > heightAbs)
-                        heightAbs = widget.Height + widget.Margin.Height;
+                    if (widget.Height + widget.Margin.Height > height)
+                        height = widget.Height + widget.Margin.Height;
                 }
                 else
                 {
-                    yAbs += widget.Height + widget.Margin.Bottom;
 
-                    heightAbs += widget.Height + widget.Margin.Height;
+                    if (VerticalAlign == VerticalAlign.Top)
+                        y += widget.Height + widget.Margin.Bottom;
+                    else if (VerticalAlign == VerticalAlign.Bottom)
+                        y -= widget.Height + widget.Margin.Top;
 
-                    if (widget.Width + widget.Margin.Width > widthAbs)
-                        widthAbs = widget.Width + widget.Margin.Width;
+                    height += widget.Height + widget.Margin.Height;
+
+                    if (widget.Width + widget.Margin.Width > width)
+                        width = widget.Width + widget.Margin.Width;
                 }
-
             }
 
             if (SizeMode == SizeMode.Auto)
             {
-                Width = widthAbs;
-                Height = heightAbs;
+                Width = width;
+                Height = height;
             }
+        }
 
+        private List<Widget> ReverseByOrientation(List<Widget> widgetList, bool disableCenter)
+        {
+            if (Orientation == Orientation.Horizontal && HorizontalAlign == HorizontalAlign.Left || disableCenter)
+                return widgetList;
+
+            if (VerticalAlign == VerticalAlign.Top && Orientation != Orientation.Vertical)
+                return widgetList.Reverse<Widget>().ToList();
+
+            if (VerticalAlign == VerticalAlign.Bottom)
+                return widgetList.Reverse<Widget>().ToList();
+
+            return widgetList;
+        }
+
+        private void CalculateWidgetPosition(bool disableCenter, float x, float y, Widget widget)
+        {
+            if (HorizontalAlign == HorizontalAlign.Left || disableCenter)
+                widget.X = x + widget.Margin.Left + widget.Width / 2;
+            else if (HorizontalAlign == HorizontalAlign.Right)
+                widget.X = x - widget.Margin.Right - widget.Width / 2;
+            else if (HorizontalAlign == HorizontalAlign.Center)
+                widget.X = x;
+
+            if (VerticalAlign == VerticalAlign.Top)
+                widget.Y = y + widget.Margin.Top + widget.Height / 2;
+            else if (VerticalAlign == VerticalAlign.Bottom)
+                widget.Y = y - widget.Margin.Bottom - widget.Height / 2;
         }
     }
 }
