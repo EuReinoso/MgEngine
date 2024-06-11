@@ -16,10 +16,11 @@ namespace MgEngine.UI
     public class Panel : Widget
     {
         private List<Widget> _widgets;
-        public HorizontalAlign HorizontalAlign { get; set; }
-        public VerticalAlign VerticalAlign { get; set; }
-        public Orientation Orientation { get; set; }
-        public SizeMode SizeMode { get; set; }
+
+        private HorizontalAlign _horizontalAlign;
+        private VerticalAlign _verticalAlign;
+        private Orientation _orientation;
+        private SizeMode _sizeMode;
 
         public Color BackGroundColor { get; set; }
 
@@ -33,20 +34,53 @@ namespace MgEngine.UI
             Initialize();
         }
 
+        #region Properties
+        public HorizontalAlign HorizontalAlign
+        {
+            get { return _horizontalAlign; }
+            set { _horizontalAlign = value; AlocateWidgets(); }
+        }
+
+        public VerticalAlign VerticalAlign
+        {
+            get { return _verticalAlign; }
+            set { _verticalAlign = value; AlocateWidgets(); }
+        }
+
+        public Orientation Orientation
+        {
+            get { return _orientation; }
+            set { _orientation = value; AlocateWidgets(); }
+        }
+
+        public SizeMode SizeMode
+        {
+            get { return _sizeMode; }
+            set { _sizeMode = value; AlocateWidgets(); }
+        }
+        #endregion
+
         private void Initialize()
         {
             _widgets = new();
 
-            HorizontalAlign = HorizontalAlign.Left;
-            VerticalAlign = VerticalAlign.Top;
-            Orientation = Orientation.Vertical;
-            SizeMode = SizeMode.Auto;
+            _horizontalAlign = HorizontalAlign.Left;
+            _verticalAlign = VerticalAlign.Top;
+            _orientation = Orientation.Vertical;
+            _sizeMode = SizeMode.Auto;
             BackGroundColor = Color.Transparent;
+
+            OnResize += () => { AlocateWidgets(); };
+            OnMove += () => { AlocateWidgets(); };
         }
 
         public void AddWidget(Widget widget)
         {
+            widget.OnResize += () => { AlocateWidgets(); };
+
             _widgets.Add(widget);
+
+            AlocateWidgets();
         }
 
         public void RemoveWidget(Widget widget)
@@ -56,8 +90,6 @@ namespace MgEngine.UI
 
         public override void Update(Inputter inputter)
         {
-            AlocateWidgets();
-
             foreach(var widget in _widgets)
             {
                 widget.IsEnabled = IsEnabled;
