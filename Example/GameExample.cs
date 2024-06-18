@@ -34,14 +34,13 @@ namespace GameExample
 
         protected override void Initialize()
         {
+            _shapeBatch = new(GraphicsDevice);
+            _spriteBatch = new(GraphicsDevice);
+
             _window = new(_graphics, _spriteBatch);
             _window.SetBackGroundColor(Color.Black);
 
             _inputter = new(_window);
-
-            _shapeBatch = new(GraphicsDevice);
-
-            _spriteBatch = new(GraphicsDevice);
 
             _font = new(Content, "Font/monogram", new() { 8, 9, 10, 11, 12, 13, 14, 15 });
 

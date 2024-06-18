@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+#pragma warning disable CS8618
 namespace MgEngine.Screen
 {
     public class Window
