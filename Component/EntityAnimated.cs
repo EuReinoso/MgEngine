@@ -27,14 +27,17 @@ namespace MgEngine.Component
 
         public void SetAction(object actionKey)
         {
+            if (_initialized && _animator.CurrentAction == actionKey)
+                return;
+
             _animator.SetAction(actionKey);
             _texture = _animator.GetTexture(actionKey);
             _sourceRectangle = _animator.GetCurrentFrame();
-            Width = _sourceRectangle.Width;
-            Height = _sourceRectangle.Height;
 
             if (!_initialized)
             {
+                Width = _sourceRectangle.Width;
+                Height = _sourceRectangle.Height;
                 ResizeScale(MgDefault.Scale);
                 _initialized = true;
             }

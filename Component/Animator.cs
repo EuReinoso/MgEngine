@@ -36,6 +36,8 @@ namespace MgEngine.Component
             _animations.SetAnimation(actionKey);
         }
 
+        public object CurrentAction { get { return _animations.CurrentAction; } }
+
         public Texture2D GetTexture(object actionKey)
         {
             return _textures[actionKey];

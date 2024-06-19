@@ -13,6 +13,7 @@ namespace MgEngine.Component
         protected Rectangle _sourceRectangle;
 
         public Color ColorEffect { get; set; }
+        public SpriteEffects Effect { get; set; }
         
         #region Constructor
         public Entity(Texture2D texture)
@@ -24,6 +25,7 @@ namespace MgEngine.Component
             Height = texture.Height;
 
             ColorEffect = Color.White;
+            Effect = SpriteEffects.None;
 
             ResizeScale(MgDefault.Scale);
         }
@@ -31,6 +33,7 @@ namespace MgEngine.Component
         protected Entity()
         {
             ColorEffect = Color.White;
+            Effect = SpriteEffects.None;
 
             ResizeScale(MgDefault.Scale);
         }
@@ -45,7 +48,7 @@ namespace MgEngine.Component
 
             var destRectangle = new Rectangle((int)(X + scrollX), (int)(Y + scrollY), Width, Height);
 
-            spriteBatch.Draw(_texture, destRectangle, _sourceRectangle, ColorEffect, Rotation, SourceCenter, SpriteEffects.None, 0f);
+            spriteBatch.Draw(_texture, destRectangle, _sourceRectangle, ColorEffect, Rotation, SourceCenter, Effect, 0f);
         }
 
         public void DrawRect(ShapeBatch shapeBatch,  Color color, float scrollX = 0, float scrollY = 0)

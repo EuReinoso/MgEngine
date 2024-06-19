@@ -41,6 +41,8 @@ namespace MgEngine.Component
             _currentAnimationKey = actionKey;
         }
 
+        public object CurrentAction { get { return _currentAnimationKey; } }
+
         public Animation CurrentAnimation
         {
             get { return _animations[_currentAnimationKey]; }
