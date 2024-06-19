@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using MgEngine.Component;
+using MgEngine.Util;
 
 namespace MgEngine.Screen
 {
@@ -24,6 +25,11 @@ namespace MgEngine.Screen
         private Vector2 _target;
         private Entity? _entityTarget;
 
+        public float MinX { get; set;}
+        public float MaxX { get; set; }
+        public float MinY { get; set; }
+        public float MaxY { get; set; }
+
         public Scroller(Canvas canvas)
         {
             _canvas = canvas;
@@ -39,6 +45,11 @@ namespace MgEngine.Screen
             _x = 0; 
             _y = 0;
             _zoom = 1;
+
+            MinX = -10000;
+            MaxX = 10000;
+            MinY = -5000;
+            MaxY = 5000;
         }
 
         public float X
@@ -80,6 +91,9 @@ namespace MgEngine.Screen
 
             _x = (int)_trueX;
             _y = (int)_trueY;
+
+            _x = MgMath.Clamp(_x, MinX, MaxX);
+            _y = MgMath.Clamp(_y, MinY, MaxY);
         }
 
         public void SetTarget(Vector2 target)
@@ -115,6 +129,34 @@ namespace MgEngine.Screen
         {
             _baseWidth = _canvas.Width;
             _baseHeight = _canvas.Height;
+        }
+
+        public void CalculateBorders(List<Entity> tiles, float marginX = 0, float marginY = 0)
+        {
+            float minX = 0;
+            float maxX = 0;
+            float minY = 0;
+            float maxY = 0;
+
+            foreach(var tile in tiles)
+            {
+                if (tile.X < minX)
+                    minX = tile.X;
+
+                if (tile.X > maxX)
+                    maxX = tile.X;
+
+                if (tile.Y < minY)
+                    minY = tile.Y;
+
+                if (tile.Y > maxY)
+                    maxY = tile.Y;
+            }
+
+            MinX = minX - marginX;
+            MaxX = maxX + marginX - _baseWidth;
+            MinY = minY - marginY;
+            MaxY = maxY + marginY - _baseHeight;
         }
     }
 }
