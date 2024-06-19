@@ -136,6 +136,11 @@ namespace MgEngine.Map
             _spritesheet = spritesheet;
         }
 
+        public List<Entity> GetLayer(string layerKey)
+        {
+            return _layers[layerKey];
+        }
+
         public void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
         {
             foreach (var layer in _layers.Values)

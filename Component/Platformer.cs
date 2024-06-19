@@ -1,4 +1,5 @@
 ﻿using MgEngine.Input;
+using MgEngine.Shape;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,11 +16,19 @@ namespace MgEngine.Component
         public float JumpForce { get; set; }
         public float HorizontalSpeed { get; set; }
         public float VerticalSpeed { get; set; }
+        public byte JumpLimit { get; set; }
+        public float JumpBuffer { get; set; }
+        private byte _jumps { get; set; }
+        private bool _jumpBufferActive { get; set; }
+        private bool _jumpActive {  get; set; }
 
         public Keys KeyLeft { get; set; }
         public Keys KeyUp { get; set; }
         public Keys KeyRight { get; set; }
         public Keys KeyDown { get; set; }
+        public Keys KeyJump { get; set; }
+
+        public bool EnableVerticalMovement { get; set; }
 
         private bool _isMoveRight;
         private bool _isMoveLeft;
@@ -38,14 +47,50 @@ namespace MgEngine.Component
 
         private void Initialize()
         {
-            JumpForce = 10;
-            HorizontalSpeed = 5;
+            JumpForce = 15;
+            JumpLimit = 1;
+            JumpBuffer = 70;
+            _jumps = JumpLimit;
+            HorizontalSpeed = 6;
             VerticalSpeed = 3;
+            EnableVerticalMovement = false;
 
             KeyLeft = Keys.Left;
             KeyUp = Keys.Up;
             KeyRight = Keys.Right;
             KeyDown = Keys.Down;
+            KeyJump = Keys.Space;
+        }
+
+        public void UpdateCollision(List<Entity> tiles)
+        {
+            foreach(var tile in tiles)
+            {
+                if (Polygon.CollidePolygon(Rect.Vertices.ToList(), tile.Rect.Vertices.ToList(), out Vector2 normal, out float depth))
+                {
+                    Pos -= normal * depth;
+
+                    if (normal.Y > 0) 
+                    {
+                        Velocity = new Vector2(Velocity.X, 0);
+                        _jumps = JumpLimit;
+                    }
+                }
+                else
+                {
+                    var jumpBufferRect = Rect;
+
+                    jumpBufferRect.Y += JumpBuffer;
+
+                    if (Polygon.CollidePolygon(jumpBufferRect.Vertices.ToList(), tile.Rect.Vertices.ToList(), out Vector2 normalB, out float depthB))
+                    {
+                        if (normalB.Y > 0 && _jumpActive)
+                            _jumpBufferActive = true;
+                    }
+                }
+            }
+
+            _jumpActive = false;
         }
 
         public void UpdateMove(Inputter inputter, float dt)
@@ -103,7 +148,25 @@ namespace MgEngine.Component
                 _isMoveDown = false;
             }
 
+            if (inputter.KeyDown(KeyJump) || _jumpBufferActive)
+            {
+                _jumpActive = true;
+
+                if (_jumps > 0)
+                {
+                    _jumps--;
+                    _jumpBufferActive = false;
+                    _jumpActive = false;
+                    Velocity += new Vector2(0, -JumpForce);
+                }
+            }
+
             Move(dt);
+        }
+
+        public void UpdatePhysics(Physics physics, float dt)
+        {
+            Velocity += physics.Gravity * dt;
         }
 
         private void Move(float dt)
@@ -114,11 +177,14 @@ namespace MgEngine.Component
             if (_isMoveLeft)
                 X -= HorizontalSpeed * dt;
 
-            if (_isMoveUp)
+            if (_isMoveUp && EnableVerticalMovement)
                 Y -= VerticalSpeed * dt;
 
-            if (_isMoveDown)
+            if (_isMoveDown && EnableVerticalMovement)
                 Y += VerticalSpeed * dt;
+
+            Pos += Velocity;
         }
+
     }
 }
