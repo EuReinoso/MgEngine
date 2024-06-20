@@ -7,6 +7,8 @@ using MgEngine.Font;
 using MgEngine.Time;
 using MgEngine.Screen;
 using MgEngine.Shape;
+using MgEngine.Audio;
+using MgEngine.Util;
 
 namespace GameExample
 {
@@ -34,6 +36,10 @@ namespace GameExample
 
         protected override void Initialize()
         {
+            MgDefault.Initialize(Content);
+
+            Singer.Initialize(Content);
+
             _shapeBatch = new(GraphicsDevice);
             _spriteBatch = new(GraphicsDevice);
 

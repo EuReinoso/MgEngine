@@ -1,4 +1,5 @@
-﻿using MgEngine.Input;
+﻿using MgEngine.Audio;
+using MgEngine.Input;
 using MgEngine.Shape;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -158,6 +159,7 @@ namespace MgEngine.Component
                     _jumpBufferActive = false;
                     _jumpActive = false;
                     Velocity += new Vector2(0, -JumpForce);
+                    Singer.PlaySound("Jump", 1, true);
                 }
             }
 
