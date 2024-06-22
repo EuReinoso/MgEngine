@@ -1,4 +1,7 @@
-﻿using MgEngine.Screen;
+﻿using MgEngine.Component;
+using MgEngine.Input;
+using MgEngine.Interface;
+using MgEngine.Screen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -56,6 +59,32 @@ namespace MgEngine.Util
             return new Color(color.R, color.G, color.B, newAlpha);
         }
 
+        public static List<T> Choice<T>(this List<T> originalList, int quant, bool removeFromOriginal = false)
+        {
+            var rand = new Random();
+
+            var randList = new List<T>();
+
+            for (int i = 0; i < quant; i++)
+            {
+                int index = rand.Next(originalList.Count);
+
+                randList.Add(originalList[index]);
+
+                if (removeFromOriginal)
+                    originalList.RemoveAt(index);
+            }
+
+            return randList;
+        }
+
+        public static void UpdateList<T>(this List<T> list, Inputter inputter, float dt) where T : IUpdate
+        {
+            foreach(var item in list)
+            {
+                item.Update(inputter, dt);
+            }
+        }
 
 #pragma warning disable CS8602
 #pragma warning disable CS8600

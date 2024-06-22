@@ -14,9 +14,10 @@ namespace MgEngine.Map
 {
     public class Tiled
     {
-        Map _map;
-        Dictionary<string, List<Entity>> _layers;
-        SpriteSheet _spritesheet;
+        private Map _map;
+        private Dictionary<string, List<object>> _layers;
+        private Dictionary<string, Type> _layerClass;
+        private SpriteSheet _spritesheet;
 
         #region Classes
         public class Map
@@ -131,14 +132,30 @@ namespace MgEngine.Map
         }
         #endregion
 
-        public Tiled(SpriteSheet spritesheet)
+        public Tiled(SpriteSheet spritesheet, Dictionary<string, Type>? layerClass = null)
         {
             _spritesheet = spritesheet;
+            //_layerClass = layerClass;
+
+
         }
 
-        public List<Entity> GetLayer(string layerKey)
+        public List<T> GetLayer<T>(string layerKey) where T : Entity, new()
         {
-            return _layers[layerKey];
+            var typedLayer = new List<T>();
+
+            foreach (Entity ent in _layers[layerKey])
+            {
+                var typedEnt = new T();
+
+                typedEnt.X = ent.X;
+                typedEnt.Y = ent.Y;
+                typedEnt.SetTexture(ent.GetTexture());
+
+                typedLayer.Add(typedEnt);
+            }
+
+            return typedLayer;
         }
 
         public void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
@@ -147,7 +164,7 @@ namespace MgEngine.Map
             {
                 foreach (var entity in layer)
                 {
-                    entity.Draw(spriteBatch, scrollX, scrollY);
+                    ((Entity)entity).Draw(spriteBatch, scrollX, scrollY);
                 }
             }
         }
@@ -163,7 +180,7 @@ namespace MgEngine.Map
 
             foreach (var layer in _map.Layers)
             {
-                var entities = new List<Entity>();
+                var entities = new List<object>();
 
                 int y = 0;
                 int x = 0;

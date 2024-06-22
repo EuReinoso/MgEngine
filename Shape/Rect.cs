@@ -1,6 +1,7 @@
 ﻿using MgEngine.Component;
 using MgEngine.Util;
 using Microsoft.Xna.Framework;
+using System.Reflection.Metadata.Ecma335;
 
 namespace MgEngine.Shape
 {
@@ -122,7 +123,10 @@ namespace MgEngine.Shape
             return (Left <= point.X && Right >= point.X && Top <= point.Y && Bottom >= point.Y);
         }
 
-
+        public List<Vector2> GetVertices()
+        {
+            return _vertices.ToList();
+        }
 
     }
 }

@@ -19,9 +19,9 @@ namespace MgEngine.Component
         public float VerticalSpeed { get; set; }
         public byte JumpLimit { get; set; }
         public float JumpBuffer { get; set; }
-        private byte _jumps { get; set; }
-        private bool _jumpBufferActive { get; set; }
-        private bool _jumpActive {  get; set; }
+        protected byte _jumps { get; set; }
+        protected bool _jumpBufferActive { get; set; }
+        protected bool _jumpActive {  get; set; }
 
         public Keys KeyLeft { get; set; }
         public Keys KeyUp { get; set; }
@@ -31,10 +31,10 @@ namespace MgEngine.Component
 
         public bool EnableVerticalMovement { get; set; }
 
-        private bool _isMoveRight;
-        private bool _isMoveLeft;
-        private bool _isMoveUp;
-        private bool _isMoveDown;
+        protected bool _isMoveRight;
+        protected bool _isMoveLeft;
+        protected bool _isMoveUp;
+        protected bool _isMoveDown;
 
         public Platformer()
         {
@@ -48,9 +48,9 @@ namespace MgEngine.Component
 
         private void Initialize()
         {
-            JumpForce = 15;
+            JumpForce = 12;
             JumpLimit = 1;
-            JumpBuffer = 70;
+            JumpBuffer = 80;
             _jumps = JumpLimit;
             HorizontalSpeed = 6;
             VerticalSpeed = 3;
@@ -162,16 +162,14 @@ namespace MgEngine.Component
                     Singer.PlaySound("Jump", 1, true);
                 }
             }
-
-            Move(dt);
         }
 
         public void UpdatePhysics(Physics physics, float dt)
         {
-            Velocity += physics.Gravity * dt;
+            Velocity += physics.Gravity * Mass * dt;
         }
 
-        private void Move(float dt)
+        public void Move(float dt)
         {
             if (_isMoveRight)
                 X += HorizontalSpeed * dt;
