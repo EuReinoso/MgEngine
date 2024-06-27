@@ -9,6 +9,7 @@ using MgEngine.Screen;
 using MgEngine.Shape;
 using MgEngine.Audio;
 using MgEngine.Util;
+using MgEngine.Effect;
 
 namespace GameExample
 {
@@ -39,6 +40,7 @@ namespace GameExample
             MgDefault.Initialize(Content);
 
             Singer.Initialize(Content);
+            Particlerr.Initialize(Content);
 
             _shapeBatch = new(GraphicsDevice);
             _spriteBatch = new(GraphicsDevice);

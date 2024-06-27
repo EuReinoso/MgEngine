@@ -16,6 +16,9 @@ namespace MgEngine.Util
             FontSize = 11;
             ButtonTexture = content.Load<Texture2D>("UI/Default/Button");
             PanelTexture = content.Load<Texture2D>("UI/Default/Panel");
+            CircleTexture = content.Load<Texture2D>("Effect/Default/Circle");
+            RectTexture = content.Load<Texture2D>("Effect/Default/Rect");
+            TriangleTexture = content.Load<Texture2D>("Effect/Default/Triangle");
             Scale = 1;
             Margin = new(3, 3, 3, 3);
         }
@@ -23,14 +26,14 @@ namespace MgEngine.Util
         public static float Scale;
 
         public static FontGroup Font;
-
         public static int FontSize;
 
         public static Texture2D ButtonTexture;
-
         public static Texture2D PanelTexture;
-
         public static Margin Margin;
 
+        public static Texture2D CircleTexture;
+        public static Texture2D RectTexture;
+        public static Texture2D TriangleTexture;
     }
 }

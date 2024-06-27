@@ -64,6 +64,7 @@ namespace MgEngine.Component
 
             shapeBatch.DrawRect(rect, color);
         }
+
         public virtual void Update(Inputter inputter, float dt) { }
 
         public static void DrawList<T>(List<T> list, SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0) where T : Entity

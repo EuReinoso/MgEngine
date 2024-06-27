@@ -6,6 +6,8 @@ namespace MgEngine.Util
 {
     public static class MgMath
     {
+        private static Random _random = new Random();
+
         public static float ToRadians(float angleDegrees)
         {
             return angleDegrees * MathF.PI / 180;
@@ -54,6 +56,16 @@ namespace MgEngine.Util
                 return max;
 
             return val;
+        }
+
+        public static int RandInt(int min, int max)
+        {
+            return _random.Next(min, max);
+        }
+
+        public static float RandFloat(float min, float max)
+        {
+            return _random.NextSingle() * (max - min) + min;
         }
     }
 }
