@@ -85,6 +85,26 @@ namespace MgEngine.Util
                 item.Update(inputter, dt);
             }
         }
+        
+        public static Texture2D PaintTexture(Texture2D texture, Color color)
+        {
+            var texturePainted = new Texture2D(texture.GraphicsDevice, texture.Width, texture.Height, false, texture.Format);
+
+            var data = new Color[texture.Width * texture.Height];
+            texture.GetData(data);
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] == Color.Transparent)
+                    continue;
+
+                data[i] = color;
+            }
+
+            texturePainted.SetData(data);
+
+            return texturePainted;
+        }
 
 #pragma warning disable CS8602
 #pragma warning disable CS8600

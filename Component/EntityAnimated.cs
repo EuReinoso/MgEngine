@@ -7,7 +7,6 @@ namespace MgEngine.Component
     public class EntityAnimated : Entity
     {
         Animator _animator;
-        bool _initialized;
 
         public EntityAnimated() : base()
         {
@@ -27,20 +26,11 @@ namespace MgEngine.Component
 
         public void SetAction(object actionKey)
         {
-            if (_initialized && _animator.CurrentAction == actionKey)
+            if (_firstTextureLoaded && _animator.CurrentAction == actionKey)
                 return;
 
             _animator.SetAction(actionKey);
-            _texture = _animator.GetTexture(actionKey);
-            _sourceRectangle = _animator.GetCurrentFrame();
-
-            if (!_initialized)
-            {
-                Width = _sourceRectangle.Width;
-                Height = _sourceRectangle.Height;
-                ResizeScale(MgDefault.Scale);
-                _initialized = true;
-            }
+            SetTexture(_animator.GetTexture(actionKey), _animator.GetCurrentFrame());
         }
 
         public void Animate(float dt)

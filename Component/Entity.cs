@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MgEngine.Shape;
-using System;
 using MgEngine.Util;
 using MgEngine.Interface;
 using MgEngine.Input;
+using System;
 
 #pragma warning disable CS8618
 namespace MgEngine.Component
@@ -13,38 +13,67 @@ namespace MgEngine.Component
     {
         protected Texture2D _texture;
         protected Rectangle _sourceRectangle;
+        protected bool _firstTextureLoaded;
 
         public Color ColorEffect { get; set; }
+        private Color _borderColor { get; set; }
+        private Texture2D _borderTexture { get; set; }
+        public bool IsBorderEnabled { get; set; }
+        public int BorderWidth { get; set; }
         public SpriteEffects Effect { get; set; }
-        
+
+        public event Action? TextureChanged;
+
         #region Constructor
         public Entity(Texture2D texture)
         {
-            ColorEffect = Color.White;
-            Effect = SpriteEffects.None;
-
+            Initialize();
             SetTexture(texture);
         }
 
         public Entity()
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            BorderWidth = 1;
+            _borderColor = Color.White;
             ColorEffect = Color.White;
             Effect = SpriteEffects.None;
+            TextureChanged += Entity_TextureChanged;
         }
 
         #endregion
-        public void SetTexture(Texture2D texture)
+        public void SetTexture(Texture2D texture, Rectangle? sourceRectangle = null)
         {
             _texture = texture;
-            _sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            _sourceRectangle = sourceRectangle ?? new Rectangle(0, 0, texture.Width, texture.Height);
 
-            Width = texture.Width;
-            Height = texture.Height;
+            if (!_firstTextureLoaded)
+            {
+                Width = _sourceRectangle.Width;
+                Height = _sourceRectangle.Height;
+                ResizeScale(MgDefault.Scale);
+                _firstTextureLoaded = true;
+            }
 
-            ResizeScale(MgDefault.Scale);
+            TextureChanged?.Invoke();
         }
 
         public Texture2D GetTexture() { return _texture;}
+
+        public Color BorderColor
+        {
+            get { return _borderColor; }
+
+            set
+            {
+                _borderColor = value;
+                _borderTexture = MgUtil.PaintTexture(_texture, _borderColor);
+            }
+        }
 
         public Vector2 SourceCenter { get { return new Vector2(_sourceRectangle.Width / 2, _sourceRectangle.Height / 2); } }
 
@@ -55,7 +84,26 @@ namespace MgEngine.Component
 
             var destRectangle = new Rectangle((int)(X + scrollX), (int)(Y + scrollY), Width, Height);
 
+            if (IsBorderEnabled)
+                DrawBorder(spriteBatch, destRectangle);
+
             spriteBatch.Draw(_texture, destRectangle, _sourceRectangle, ColorEffect, Rotation, SourceCenter, Effect, 0f);
+        }
+
+        private void DrawBorder(SpriteBatch spriteBatch, Rectangle destRectangle)
+        {
+            if (_borderTexture is null)
+                _borderTexture = MgUtil.PaintTexture(_texture, _borderColor);
+
+            int x = destRectangle.X;
+            int y = destRectangle.Y;
+            int width = destRectangle.Width;
+            int height = destRectangle.Height;
+
+            spriteBatch.Draw(_borderTexture, new Rectangle(x - BorderWidth, y - BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
+            spriteBatch.Draw(_borderTexture, new Rectangle(x + BorderWidth, y - BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
+            spriteBatch.Draw(_borderTexture, new Rectangle(x + BorderWidth, y + BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
+            spriteBatch.Draw(_borderTexture, new Rectangle(x - BorderWidth, y + BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
         }
 
         public void DrawRect(ShapeBatch shapeBatch,  Color color, float scrollX = 0, float scrollY = 0)
@@ -73,6 +121,12 @@ namespace MgEngine.Component
             {
                 entity.Draw(spriteBatch, scrollX, scrollY);
             }
+        }
+
+        private void Entity_TextureChanged()
+        {
+            if (IsBorderEnabled)
+                _borderTexture = MgUtil.PaintTexture(_texture, _borderColor);
         }
     }
 }
