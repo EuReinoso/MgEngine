@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 
 #pragma warning disable CS8618
 namespace MgEngine.Audio
@@ -57,6 +58,32 @@ namespace MgEngine.Audio
             set
             {
                 _soundEffectsVolume = MgMath.Clamp(value, 0, 1);
+            }
+        }
+
+        public static void AddAllSound(string path)
+        {
+            string finalPath = Path.Combine(_content.RootDirectory, path);
+
+            foreach(string file in Directory.GetFiles(finalPath))
+            {
+                string fileName = Path.GetFileName(file).Replace(".xnb", "");
+                string filePath = file.Replace("Content\\", "").Replace(".xnb", "");
+
+                AddSound(filePath, fileName);
+            }
+        }
+
+        public static void AddAllMusic(string path)
+        {
+            string finalPath = Path.Combine(_content.RootDirectory, path);
+
+            foreach (string file in Directory.GetFiles(finalPath,"*.ogg"))
+            {
+                string fileName = Path.GetFileName(file).Replace(".ogg", "");
+                string filePath = file.Replace("Content\\", "").Replace(".ogg", "");
+
+                AddMusic(filePath, fileName);
             }
         }
 
