@@ -36,6 +36,8 @@ namespace MgEngine.Component
         protected bool _isMoveUp;
         protected bool _isMoveDown;
 
+        public event Action? JumpKeyDown;
+
         public Platformer()
         {
             Initialize();
@@ -63,7 +65,7 @@ namespace MgEngine.Component
             KeyJump = Keys.Space;
         }
 
-        public void UpdateCollision(List<Entity> tiles)
+        public virtual void UpdateCollision(List<Entity> tiles)
         {
             foreach(var tile in tiles)
             {
@@ -94,7 +96,7 @@ namespace MgEngine.Component
             _jumpActive = false;
         }
 
-        public void UpdateMove(Inputter inputter, float dt)
+        public virtual void UpdateMove(Inputter inputter)
         {
             if (inputter.KeyDown(KeyLeft))
             {
@@ -153,6 +155,8 @@ namespace MgEngine.Component
             {
                 _jumpActive = true;
 
+                JumpKeyDown?.Invoke();
+
                 if (_jumps > 0)
                 {
                     _jumps--;
@@ -164,12 +168,12 @@ namespace MgEngine.Component
             }
         }
 
-        public void UpdatePhysics(Physics physics, float dt)
+        public virtual void UpdatePhysics(Physics physics, float dt)
         {
             Velocity += physics.Gravity * Mass * dt;
         }
 
-        public void Move(float dt)
+        public virtual void Move(float dt)
         {
             if (_isMoveRight)
                 X += HorizontalSpeed * dt;
