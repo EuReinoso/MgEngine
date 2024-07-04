@@ -30,6 +30,11 @@ namespace MgEngine.Shape
         public float Top { get { return Y - Height / 2; } }
         public float Bottom { get { return Y + Height / 2; } }
 
+        public Vector2 CenterTop { get { return new Vector2(X, Top); } }
+        public Vector2 CenterRight { get { return new Vector2(Right, Y); } }
+        public Vector2 CenterBottom { get { return new Vector2(X, Bottom); } }
+        public Vector2 CenterLeft { get { return new Vector2(Left, Y); } }
+
         public Vector2 LeftTop { get { return new Vector2(Left, Top); } }
         public Vector2 RightTop { get { return new Vector2(Right, Top); } }
         public Vector2 LeftBottom { get { return new Vector2(Left, Bottom); } }
