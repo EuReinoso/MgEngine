@@ -37,6 +37,7 @@ namespace MgEngine.Component
         protected bool _isMoveDown;
 
         public event Action? JumpKeyDown;
+        public event Action? OnCollideBottom;
 
         public Platformer()
         {
@@ -77,6 +78,7 @@ namespace MgEngine.Component
                     {
                         Velocity = new Vector2(Velocity.X, 0);
                         _jumps = JumpLimit;
+                        OnCollideBottom?.Invoke();
                     }
                 }
                 else
