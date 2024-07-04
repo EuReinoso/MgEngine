@@ -16,14 +16,11 @@ namespace MgEngine.Effect
 #pragma warning disable CS8618
     public static class Particlerr
     {
-        private static ContentManager _content;
         private static List<ParticleEntity> _particles;
         private static Dictionary<object, ParticleMoveEffect> _moveEffects;
-        private static Dictionary<object, Texture2D> _textures;
 
-        public static void Initialize(ContentManager content)
+        public static void Initialize()
         {
-            _content = content;
             _particles = new();
             _moveEffects = new();
         }
@@ -33,13 +30,10 @@ namespace MgEngine.Effect
             _moveEffects.Add(key, moveEffect);
         }
 
-        private static void AddTexture(object textureKey, string path)
-        {
-            _textures.Add(textureKey, _content.Load<Texture2D>(path));
-        }
-        public static void Add(ParticleShape shape, object moveEffectKey, int quant, Vector2 pos, Color color)
+        public static void Add(int quant, ParticleShape shape, object moveEffectKey, Vector2 pos, Color color)
         {
             Texture2D texture;
+
             if (shape == ParticleShape.Circle)
                 texture = MgDefault.CircleTexture;
             else if (shape == ParticleShape.Rect)
@@ -49,6 +43,22 @@ namespace MgEngine.Effect
             else
                 texture = MgDefault.CircleTexture;
 
+            Add(quant, texture, moveEffectKey, pos, color);
+        }
+
+        public static void Add(int quant, ParticleShape shape, object moveEffectKey, Vector2 minPos, Vector2 maxPos, Color color)
+        {
+            for(int i = 0; i < quant; i++)
+            {
+                float x = MgMath.RandFloat(minPos.X, maxPos.X);
+                float y = MgMath.RandFloat(minPos.Y, maxPos.Y);
+
+                Add(1, shape, moveEffectKey, new Vector2(x, y), color);
+            }
+        }
+
+        public static void Add(int quant, Texture2D texture, object moveEffectKey, Vector2 pos, Color color)
+        {
             for (int i = 0; i < quant; i++)
             {
                 var particle = new ParticleEntity(texture, _moveEffects[moveEffectKey], pos);
@@ -57,13 +67,16 @@ namespace MgEngine.Effect
             }
         }
 
-        public static void Add(object textureKey, object moveEffectKey, Vector2 pos, Color color)
+        public static void Add(int quant, Texture2D texture, object moveEffectKey, Vector2 minPos, Vector2 maxPos, Color color)
         {
-            var particle = new ParticleEntity(_textures[textureKey], _moveEffects[moveEffectKey], pos);
+            for (int i = 0; i < quant; i++)
+            {
+                float x = MgMath.RandFloat(minPos.X, maxPos.X);
+                float y = MgMath.RandFloat(minPos.Y, maxPos.Y);
 
-            _particles.Add(particle);
+                Add(1, texture, moveEffectKey, new Vector2(x, y), color);
+            }
         }
-
 
         public static void Update(float dt)
         {
