@@ -13,9 +13,12 @@ namespace MgEngine.Component
         private int _currentFrameIndex;
         private int _currentFrameTime;
 
-        public Animation(int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1)
+        private event Action? OnReset;
+
+        public Animation(int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1, Action? onReset = null)
         {
             _frameTimeList = frameTimeList;
+            OnReset = onReset;
 
             for (int i = 0; i < frameTimeList.Count(); i++)
                 _animation.Add(new Rectangle(i * frameWidth, (row - 1) * frameHeight, frameWidth, frameHeight));
@@ -29,16 +32,19 @@ namespace MgEngine.Component
                 _currentFrameTime = 0;
 
                 if (_currentFrameIndex > _frameTimeList.Count() - 1)
-                    Reset();
+                    Reset(true);
             }
 
             _currentFrameTime++;
         }
 
-        public void Reset()
+        public void Reset(bool OnResetInvoke)
         {
             _currentFrameIndex = 0;
             _currentFrameTime = 0;
+
+            if (OnResetInvoke)
+                OnReset?.Invoke();
         }
 
         public Rectangle CurrentFrame

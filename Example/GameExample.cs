@@ -40,7 +40,7 @@ namespace GameExample
             MgDefault.Initialize(Content);
 
             Singer.Initialize(Content);
-            Particlerr.Initialize(Content);
+            Particlerr.Initialize();
 
             _shapeBatch = new(GraphicsDevice);
             _spriteBatch = new(GraphicsDevice);

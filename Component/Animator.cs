@@ -23,12 +23,12 @@ namespace MgEngine.Component
             _animations.Update(dt);
         }
 
-        public void Add(string path, object actionKey, int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1)
+        public void Add(string path, object actionKey, int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1, Action? onReset = null)
         {
             Texture2D texture = _content.Load<Texture2D>(path);
 
             _textures.Add(actionKey, texture);
-            _animations.AddAnimation(actionKey, frameWidth, frameHeight, frameTimeList, row);
+            _animations.AddAnimation(actionKey, frameWidth, frameHeight, frameTimeList, row, onReset);
         }
 
         public void SetAction(object actionKey)

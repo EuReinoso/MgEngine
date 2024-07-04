@@ -14,6 +14,7 @@ namespace MgEngine.Component
 {
     public class Platformer : EntityAnimated
     {
+        public bool PriorityActionActive { get; set; }
         public float JumpForce { get; set; }
         public float HorizontalSpeed { get; set; }
         public float VerticalSpeed { get; set; }
@@ -130,10 +131,13 @@ namespace MgEngine.Component
                     Effect = SpriteEffects.FlipHorizontally;
             }
 
-            if ((!_isMoveLeft && !_isMoveRight) || (_isMoveLeft && _isMoveRight))
-                SetAction("Idle");
-            else
-                SetAction("Walk");
+            if (!PriorityActionActive)
+            {
+                if ((!_isMoveLeft && !_isMoveRight) || (_isMoveLeft && _isMoveRight))
+                    SetAction("Idle");
+                else
+                    SetAction("Walk");
+            }
 
             if (inputter.KeyDown(KeyUp))
             {
