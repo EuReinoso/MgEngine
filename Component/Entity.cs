@@ -19,6 +19,7 @@ namespace MgEngine.Component
         private Color _borderColor { get; set; }
         private Texture2D _borderTexture { get; set; }
         public bool IsBorderEnabled { get; set; }
+        public bool IsBorderAutoUpdate { get; set; }
         public int BorderWidth { get; set; }
         public SpriteEffects Effect { get; set; }
 
@@ -63,6 +64,14 @@ namespace MgEngine.Component
         }
 
         public Texture2D GetTexture() { return _texture;}
+
+        public Texture2D GetBorderTexture() 
+        { 
+            if (_borderTexture is null)
+                _borderTexture = MgUtil.PaintTexture(_texture, _borderColor);
+
+            return _borderTexture; 
+        }
 
         public Color BorderColor
         {
@@ -125,7 +134,7 @@ namespace MgEngine.Component
 
         private void Entity_TextureChanged()
         {
-            if (IsBorderEnabled)
+            if (IsBorderEnabled || IsBorderAutoUpdate)
                 _borderTexture = MgUtil.PaintTexture(_texture, _borderColor);
         }
     }
