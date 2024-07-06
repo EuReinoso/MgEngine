@@ -16,7 +16,7 @@ namespace GameExample
         #endregion
 
         #region Constructor
-        public MainScene(Window window, Camera camera) : base(window, camera)
+        public MainScene(Window window, Camera camera, Clock clock) : base(window, camera, clock)
         { 
 
         }

@@ -55,7 +55,7 @@ namespace GameExample
             _clock.IsFpsLimited = false;
             //_clock.FpsLimit = 60;
 
-            _scene = new(_window, _camera);
+            _scene = new(_window, _camera, _clock);
             _scene.Initialize();
 
             base.Initialize();
@@ -70,6 +70,8 @@ namespace GameExample
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            Singer.Update();
 
             _inputter.Update(Keyboard.GetState(), Mouse.GetState());
 

@@ -12,11 +12,13 @@ namespace MgEngine.Scene
         public Window Window;
         public Camera Camera;
         public Scroller Scroller;
+        public Clock Clock;
 
-        public Scene(Window window, Camera camera) 
+        public Scene(Window window, Camera camera, Clock clock) 
         {
             Window = window;
             Camera = camera;
+            Clock = clock;
             Scroller = new Scroller(window.Canvas);
         }
 
