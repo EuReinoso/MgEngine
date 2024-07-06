@@ -7,6 +7,7 @@ namespace MgEngine.Component
     public class EntityAnimated : Entity
     {
         Animator _animator;
+        public bool PriorityActionActive { get; set; }
 
         public EntityAnimated() : base()
         {
@@ -26,7 +27,7 @@ namespace MgEngine.Component
 
         public void SetAction(object actionKey)
         {
-            if (_firstTextureLoaded && _animator.CurrentAction == actionKey)
+            if (PriorityActionActive || (_firstTextureLoaded && _animator.CurrentAction == actionKey))
                 return;
 
             _animator.SetAction(actionKey);
