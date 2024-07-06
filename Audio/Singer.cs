@@ -13,7 +13,10 @@ namespace MgEngine.Audio
     {
         private static Dictionary<object, SoundEffect> _sounds;
         private static Dictionary<object, Song> _musics;
+        private static Dictionary<object, SoundEffect> _musicEffects;
+        private static SoundEffectInstance _musicEffect;
         private static ContentManager _content;
+        private static List<SoundEffectInstance> _soundTrack;
 
         private static float _masterVolume { get; set; }
         private static float _musicVolume { get; set; }
@@ -27,6 +30,8 @@ namespace MgEngine.Audio
             _content = content;
             _sounds = new();
             _musics = new();
+            _soundTrack = new();
+            _musicEffects = new();
         }
 
         public static float MasterVolume 
@@ -61,6 +66,28 @@ namespace MgEngine.Audio
             }
         }
 
+        public static void Update()
+        {
+            for (int i = _soundTrack.Count - 1; i >= 0; i--)
+            {
+                var sound = _soundTrack[i];
+
+                if (sound.State == SoundState.Stopped)
+                    _soundTrack.RemoveAt(i);
+            }
+        }
+
+        public static void SetSpeed(float speed)
+        {
+            foreach(var sound in _soundTrack)
+            {
+                sound.Pitch = sound.Pitch * speed;
+            }
+
+            if (_musicEffect is not null)
+                _musicEffect.Pitch = speed;
+        }
+
         public static void AddAllSound(string path)
         {
             string finalPath = Path.Combine(_content.RootDirectory, path);
@@ -85,6 +112,14 @@ namespace MgEngine.Audio
 
                 AddMusic(filePath, fileName);
             }
+
+            foreach (string file in Directory.GetFiles(finalPath, "*.xnb"))
+            {
+                string fileName = Path.GetFileName(file).Replace(".xnb", "");
+                string filePath = file.Replace("Content\\", "").Replace(".xnb", "");
+
+                AddMusicEffect(filePath, fileName);
+            }
         }
 
         public static void AddSound(string path, object key)
@@ -99,14 +134,33 @@ namespace MgEngine.Audio
             _musics.Add(key, music);
         }
 
-        public static void PlaySound(object soundKey, float volume = 1, bool validateKey = false)
+        public static void AddMusicEffect(string path, object key)
+        {
+            var music = _content.Load<SoundEffect>(path);
+            _musicEffects.Add(key, music);
+        }
+
+        public static void PlaySound(object soundKey, float volume = 1, bool validateKey = false, bool isLooped = false)
         {
             if (validateKey && !_sounds.ContainsKey(soundKey))
                 return;
 
             var sound = _sounds[soundKey].CreateInstance();
             sound.Volume = MgMath.Clamp(volume * _soundEffectsVolume * _masterVolume, 0, 1);
+            sound.IsLooped = isLooped;
             sound.Play();
+            _soundTrack.Add(sound);
+        }
+
+        public static void PlayMusicEffect(object musicKey, float volume = 1, bool isLooped = false)
+        {
+            if (_musicEffect is not null)
+                _musicEffect.Stop();
+
+            _musicEffect = _musicEffects[musicKey].CreateInstance();
+            _musicEffect.Volume = MgMath.Clamp(volume * _musicVolume * _masterVolume, 0, 1);
+            _musicEffect.IsLooped = isLooped;
+            _musicEffect.Play();
         }
 
         public static void PlayMusic(object musicKey, bool repeat = true)
