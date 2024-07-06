@@ -13,12 +13,14 @@ namespace MgEngine.Time
         private int _fps;
         private float _fpsUpdateTicks;
         private int _fpsLimit = 60;
+        public float Speed { get; set;}
 
         public Clock(Game game)
         {
             _game = game;
 
             IsFpsLimited = false;
+            Speed = 1;
         }
 
         #region Property
@@ -72,7 +74,7 @@ namespace MgEngine.Time
 
         private void UpdateDt(GameTime gameTime)
         {
-            _dt = (float)(gameTime.ElapsedGameTime.TotalSeconds * 60);
+            _dt = (float)(gameTime.ElapsedGameTime.TotalSeconds * 60 * Speed);
         }
 
         public int DtInt(float amount)
