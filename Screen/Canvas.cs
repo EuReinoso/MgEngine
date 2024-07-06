@@ -9,11 +9,13 @@ namespace MgEngine.Screen
         private GraphicsDevice _graphicsDevice;
         private RenderTarget2D _renderTarget;
         private Rectangle _destinationRectangle;
+        public Color ColorEffect { get; set; }
 
         public Canvas(GraphicsDevice graphicsDevice, int width, int height)
         {
             _graphicsDevice = graphicsDevice;
             _renderTarget = new(_graphicsDevice, width, height);
+            ColorEffect = Color.White;
         }
 
         public int Width { 
@@ -75,7 +77,7 @@ namespace MgEngine.Screen
         public void Draw(SpriteBatch spriteBatch, SpriteSortMode spriteSortMode = SpriteSortMode.BackToFront, BlendState? blendState = null, SamplerState? samplerState = null, BasicEffect? effects = null)
         {
             spriteBatch.Begin(spriteSortMode, blendState, samplerState,rasterizerState : RasterizerState.CullNone, effect : effects);
-            spriteBatch.Draw(_renderTarget, _destinationRectangle, Color.White);
+            spriteBatch.Draw(_renderTarget, _destinationRectangle, ColorEffect);
             spriteBatch.End();
         }
 
