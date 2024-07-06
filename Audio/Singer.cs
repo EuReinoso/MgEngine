@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
+using System.IO;
 
 #pragma warning disable CS8618
 namespace MgEngine.Audio
@@ -86,6 +86,19 @@ namespace MgEngine.Audio
 
             if (_musicEffect is not null)
                 _musicEffect.Pitch = speed;
+        }
+
+        public static void VolumeFlush()
+        {
+            foreach (var sound in _soundTrack)
+            {
+                sound.Volume = _soundEffectsVolume * _masterVolume;
+            }
+
+            if (_musicEffect is not null)
+                _musicEffect.Volume = _musicVolume * _masterVolume;
+
+            MediaPlayer.Volume = _musicVolume * _masterVolume;
         }
 
         public static void AddAllSound(string path)
