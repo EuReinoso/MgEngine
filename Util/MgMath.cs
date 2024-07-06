@@ -67,5 +67,10 @@ namespace MgEngine.Util
         {
             return _random.NextSingle() * (max - min) + min;
         }
+
+        public static float GetRotationDirection(Vector2 direction)
+        {
+            return (float)Math.Atan2(direction.Y, direction.X);
+        }
     }
 }
