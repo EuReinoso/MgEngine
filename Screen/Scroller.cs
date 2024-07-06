@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using MgEngine.Component;
 using MgEngine.Util;
+using MgEngine.Time;
+using System.Collections.Generic;
 
 namespace MgEngine.Screen
 {
@@ -25,6 +27,10 @@ namespace MgEngine.Screen
         private Vector2 _target;
         private Entity? _entityTarget;
 
+        private Timer _shakeTimer;
+        private float _minShake;
+        private float _maxShake;
+
         public float MinX { get; set;}
         public float MaxX { get; set; }
         public float MinY { get; set; }
@@ -42,7 +48,7 @@ namespace MgEngine.Screen
             _delayX = 30;
             _delayY = 5;
 
-            _x = 0; 
+            _x = 0;
             _y = 0;
             _zoom = 1;
 
@@ -50,6 +56,8 @@ namespace MgEngine.Screen
             MaxX = 10000;
             MinY = -5000;
             MaxY = 5000;
+
+            _shakeTimer = new();
         }
 
         public float X
@@ -81,7 +89,7 @@ namespace MgEngine.Screen
             }
         }
 
-        public void Update()
+        public void Update(float dt)
         {
             if (_entityTarget != null)
                 _target = _entityTarget.Pos;
@@ -94,6 +102,13 @@ namespace MgEngine.Screen
 
             _x = MgMath.Clamp(_x, MinX, MaxX);
             _y = MgMath.Clamp(_y, MinY, MaxY);
+
+            if (_shakeTimer.IsActivate)
+            {
+                _x += MgMath.RandFloat(_minShake, _maxShake);
+                _y += MgMath.RandFloat(_minShake, _maxShake);
+                _shakeTimer.Update(dt);
+            }
         }
 
         public void SetTarget(Vector2 target)
@@ -157,6 +172,14 @@ namespace MgEngine.Screen
             MaxX = maxX + marginX - _baseWidth;
             MinY = minY - marginY;
             MaxY = maxY + marginY - _baseHeight;
+        }
+
+        public void Shake(int duration, float minDeslocation, float maxDeslocation)
+        {
+            _minShake = minDeslocation;
+            _maxShake = maxDeslocation;
+            _shakeTimer.Duration = duration;
+            _shakeTimer.Start();
         }
     }
 }
