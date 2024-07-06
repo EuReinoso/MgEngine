@@ -30,6 +30,7 @@ namespace MgEngine.Component
         public Keys KeyJump { get; set; }
 
         public bool EnableVerticalMovement { get; set; }
+        public bool EnableHorizontalMovement { get; set; }
 
         protected bool _isMoveRight;
         protected bool _isMoveLeft;
@@ -58,6 +59,7 @@ namespace MgEngine.Component
             HorizontalSpeed = 6;
             VerticalSpeed = 3;
             EnableVerticalMovement = false;
+            EnableHorizontalMovement = true;
 
             KeyLeft = Keys.Left;
             KeyUp = Keys.Up;
@@ -130,7 +132,7 @@ namespace MgEngine.Component
                     Effect = SpriteEffects.FlipHorizontally;
             }
 
-            if ((!_isMoveLeft && !_isMoveRight) || (_isMoveLeft && _isMoveRight))
+            if (!EnableHorizontalMovement || (!_isMoveLeft && !_isMoveRight) || (_isMoveLeft && _isMoveRight))
                 SetAction("Idle");
             else
                 SetAction("Walk");
@@ -177,10 +179,10 @@ namespace MgEngine.Component
 
         public virtual void Move(float dt)
         {
-            if (_isMoveRight)
+            if (_isMoveRight && EnableHorizontalMovement)
                 X += HorizontalSpeed * dt;
 
-            if (_isMoveLeft)
+            if (_isMoveLeft && EnableHorizontalMovement)
                 X -= HorizontalSpeed * dt;
 
             if (_isMoveUp && EnableVerticalMovement)

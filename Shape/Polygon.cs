@@ -1,6 +1,9 @@
 ﻿using MgEngine.Component;
 using MgEngine.Util;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace MgEngine.Shape
 {

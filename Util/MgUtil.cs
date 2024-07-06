@@ -5,10 +5,8 @@ using MgEngine.Screen;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml.Serialization;
+using System;
+using System.Collections.Generic;
 
 namespace MgEngine.Util
 {

@@ -5,6 +5,8 @@ using MgEngine.Font;
 using MgEngine.Util;
 using MgEngine.Shape;
 using static MgEngine.UI.UITypes;
+using System;
+using System.Collections.Generic;
 
 #pragma warning disable CS8618
 namespace MgEngine.UI

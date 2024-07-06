@@ -5,6 +5,7 @@ using MgEngine.Util;
 using MgEngine.Interface;
 using MgEngine.Input;
 using System;
+using System.Collections.Generic;
 
 #pragma warning disable CS8618
 namespace MgEngine.Component

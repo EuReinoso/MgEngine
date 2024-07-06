@@ -1,7 +1,9 @@
 ﻿using MgEngine.Component;
 using MgEngine.Util;
 using Microsoft.Xna.Framework;
-using System.Reflection.Metadata.Ecma335;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MgEngine.Shape
 {
