@@ -130,9 +130,14 @@ namespace MgEngine.Shape
             }
         }
 
-        public bool IsCollidePoint(Vector2 point)
+        public bool CollidePoint(Vector2 point)
         {
             return (Left <= point.X && Right >= point.X && Top <= point.Y && Bottom >= point.Y);
+        }
+
+        public bool CollideRect(Rect rect, int marginX = 0, int marginY = 0)
+        {
+            return Right >= rect.Left + marginX && Left <= rect.Right - marginX && Top <= rect.Bottom - marginY && Bottom >= rect.Top + marginY;
         }
 
         public List<Vector2> GetVertices()

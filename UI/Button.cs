@@ -103,7 +103,7 @@ namespace MgEngine.UI
 
         public override void Update(Inputter inputter)
         {
-            _isHover = Rect.IsCollidePoint(inputter.GetMousePos());
+            _isHover = Rect.CollidePoint(inputter.GetMousePos());
 
             if (!IsEnabled)
                 return;
