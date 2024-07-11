@@ -23,6 +23,7 @@ namespace MgEngine.Component
         public bool IsBorderAutoUpdate { get; set; }
         public int BorderWidth { get; set; }
         public SpriteEffects Effect { get; set; }
+        public float Scale { get; set; }
 
         public event Action? TextureChanged;
 
@@ -45,19 +46,22 @@ namespace MgEngine.Component
             ColorEffect = Color.White;
             Effect = SpriteEffects.None;
             TextureChanged += Entity_TextureChanged;
+            Scale = MgDefault.Scale;
         }
 
         #endregion
         public void SetTexture(Texture2D texture, Rectangle? sourceRectangle = null)
         {
+            bool resize = (_texture is not null && (texture.Width != _texture.Width || texture.Height != _texture.Height));
+
             _texture = texture;
             _sourceRectangle = sourceRectangle ?? new Rectangle(0, 0, texture.Width, texture.Height);
 
-            if (!_firstTextureLoaded)
+            if (!_firstTextureLoaded || resize)
             {
                 Width = _sourceRectangle.Width;
                 Height = _sourceRectangle.Height;
-                ResizeScale(MgDefault.Scale);
+                ResizeScale(Scale);
                 _firstTextureLoaded = true;
             }
 

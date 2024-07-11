@@ -15,13 +15,21 @@ namespace MgEngine.Component
 
         private event Action? OnReset;
 
-        public Animation(int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1, Action? onReset = null)
+        public Animation(int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1, Action? onReset = null, bool reverse = false)
         {
             _frameTimeList = frameTimeList;
             OnReset = onReset;
 
-            for (int i = 0; i < frameTimeList.Count(); i++)
-                _animation.Add(new Rectangle(i * frameWidth, (row - 1) * frameHeight, frameWidth, frameHeight));
+            if (reverse)
+            {
+                for (int i = frameTimeList.Count - 1; i >= 0; i--)
+                    _animation.Add(new Rectangle(i * frameWidth, (row - 1) * frameHeight, frameWidth, frameHeight));
+            }
+            else
+            {
+                for (int i = 0; i < frameTimeList.Count; i++)
+                    _animation.Add(new Rectangle(i * frameWidth, (row - 1) * frameHeight, frameWidth, frameHeight));
+            }
         }
 
         public void Update(float dt)
