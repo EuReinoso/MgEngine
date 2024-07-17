@@ -11,12 +11,14 @@ namespace MgEngine.Component
         private ContentManager _content;
         private AnimationManager _animations;
         private Dictionary<object, Texture2D> _textures;
+        private Dictionary<object, Vector2?> _offSets;
 
         public Animator(ContentManager content) 
         { 
             _content = content;
             _animations = new();
             _textures = new();
+            _offSets = new();
         }
 
         public void Update(float dt)
@@ -24,15 +26,16 @@ namespace MgEngine.Component
             _animations.Update(dt);
         }
 
-        public void Add(string path, object actionKey, int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1, Action? onReset = null, bool reverse = false)
+        public void Add(string path, object actionKey, int frameWidth, int frameHeight, List<int> frameTimeList, int row = 1, Action? onReset = null, bool reverse = false, Vector2? offSet = null)
         {
             Texture2D texture = _content.Load<Texture2D>(path);
 
             _textures.Add(actionKey, texture);
+            _offSets.Add(actionKey, offSet);
             _animations.AddAnimation(actionKey, frameWidth, frameHeight, frameTimeList, row, onReset, reverse);
         }
 
-        public void Add(string path, object actionKey, int frameWidth, int frameHeight, int frameDuration, int row = 1, Action? onReset = null, bool reverse = false)
+        public void Add(string path, object actionKey, int frameWidth, int frameHeight, int frameDuration, int row = 1, Action? onReset = null, bool reverse = false, Vector2? offSet = null)
         {
             Texture2D texture = _content.Load<Texture2D>(path);
 
@@ -43,6 +46,7 @@ namespace MgEngine.Component
             }
 
             _textures.Add(actionKey, texture);
+            _offSets.Add(actionKey, offSet);
             _animations.AddAnimation(actionKey, frameWidth, frameHeight, framesList, row, onReset, reverse);
         }
 
@@ -56,6 +60,11 @@ namespace MgEngine.Component
         public Texture2D GetTexture(object actionKey)
         {
             return _textures[actionKey];
+        }
+
+        public Vector2? GetOffSet(object actionKey)
+        {
+            return _offSets[actionKey];
         }
 
         public Rectangle GetCurrentFrame()

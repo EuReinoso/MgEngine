@@ -19,6 +19,13 @@ namespace MgEngine.Shape
             CalculateVertices();
         }
 
+        public Rect(Vector2 pos, int width, int height, float rotation = 0) : base(pos.X, pos.Y, width, height)
+        {
+            _vertices = new Vector2[4];
+            Rotation = rotation;
+            CalculateVertices();
+        }
+
         public Rect(Rectangle rectangle) : base(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height)
         {
             _vertices = new Vector2[4];

@@ -7,6 +7,7 @@ namespace MgEngine.Component
     public class EntityAnimated : Entity
     {
         Animator _animator;
+        private object _currentAction;
         public bool PriorityActionActive { get; set; }
 
         public EntityAnimated() : base()
@@ -17,6 +18,8 @@ namespace MgEngine.Component
         {
             _animator = animator;
         }
+
+        public object CurrentAction { get{ return _currentAction; } }
 
         #region Methods
 
@@ -31,7 +34,8 @@ namespace MgEngine.Component
                 return;
 
             _animator.SetAction(actionKey);
-            SetTexture(_animator.GetTexture(actionKey), _animator.GetCurrentFrame());
+            SetTexture(_animator.GetTexture(actionKey), _animator.GetCurrentFrame(), _animator.GetOffSet(actionKey));
+            _currentAction = actionKey;
         }
 
         public void Animate(float dt)

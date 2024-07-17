@@ -24,6 +24,7 @@ namespace MgEngine.Component
         public int BorderWidth { get; set; }
         public SpriteEffects Effect { get; set; }
         public float Scale { get; set; }
+        public Vector2 OffSet { get; set; }
 
         public event Action? TextureChanged;
 
@@ -47,15 +48,17 @@ namespace MgEngine.Component
             Effect = SpriteEffects.None;
             TextureChanged += Entity_TextureChanged;
             Scale = MgDefault.Scale;
+            OffSet = Vector2.Zero;
         }
 
         #endregion
-        public void SetTexture(Texture2D texture, Rectangle? sourceRectangle = null)
+        public void SetTexture(Texture2D texture, Rectangle? sourceRectangle = null, Vector2? offSet = null)
         {
             bool resize = (_texture is not null && (texture.Width != _texture.Width || texture.Height != _texture.Height));
 
             _texture = texture;
             _sourceRectangle = sourceRectangle ?? new Rectangle(0, 0, texture.Width, texture.Height);
+            OffSet = offSet ?? SourceCenter;
 
             if (!_firstTextureLoaded || resize)
             {
@@ -68,14 +71,14 @@ namespace MgEngine.Component
             TextureChanged?.Invoke();
         }
 
-        public Texture2D GetTexture() { return _texture;}
+        public Texture2D GetTexture() { return _texture; }
 
-        public Texture2D GetBorderTexture() 
-        { 
+        public Texture2D GetBorderTexture()
+        {
             if (_borderTexture is null)
                 _borderTexture = MgUtil.PaintTexture(_texture, _borderColor);
 
-            return _borderTexture; 
+            return _borderTexture;
         }
 
         public Color BorderColor
@@ -91,6 +94,8 @@ namespace MgEngine.Component
 
         public Vector2 SourceCenter { get { return new Vector2(_sourceRectangle.Width / 2, _sourceRectangle.Height / 2); } }
 
+        public Vector2 OffSetPos { get {return OffSet + Pos;} }
+
         public virtual void Draw(SpriteBatch spriteBatch, float scrollX = 0, float scrollY = 0)
         {
             if (_texture == null)
@@ -101,7 +106,7 @@ namespace MgEngine.Component
             if (IsBorderEnabled)
                 DrawBorder(spriteBatch, destRectangle);
 
-            spriteBatch.Draw(_texture, destRectangle, _sourceRectangle, ColorEffect, Rotation, SourceCenter, Effect, 0f);
+            spriteBatch.Draw(_texture, destRectangle, _sourceRectangle, ColorEffect, Rotation, OffSet, Effect, 0f);
         }
 
         private void DrawBorder(SpriteBatch spriteBatch, Rectangle destRectangle)
@@ -114,10 +119,10 @@ namespace MgEngine.Component
             int width = destRectangle.Width;
             int height = destRectangle.Height;
 
-            spriteBatch.Draw(_borderTexture, new Rectangle(x - BorderWidth, y - BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
-            spriteBatch.Draw(_borderTexture, new Rectangle(x + BorderWidth, y - BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
-            spriteBatch.Draw(_borderTexture, new Rectangle(x + BorderWidth, y + BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
-            spriteBatch.Draw(_borderTexture, new Rectangle(x - BorderWidth, y + BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, SourceCenter, Effect, 0f);
+            spriteBatch.Draw(_borderTexture, new Rectangle(x - BorderWidth, y - BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, OffSet, Effect, 0f);
+            spriteBatch.Draw(_borderTexture, new Rectangle(x + BorderWidth, y - BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, OffSet, Effect, 0f);
+            spriteBatch.Draw(_borderTexture, new Rectangle(x + BorderWidth, y + BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, OffSet, Effect, 0f);
+            spriteBatch.Draw(_borderTexture, new Rectangle(x - BorderWidth, y + BorderWidth, width, height), _sourceRectangle, _borderColor, Rotation, OffSet, Effect, 0f);
         }
 
         public void DrawRect(ShapeBatch shapeBatch,  Color color, float scrollX = 0, float scrollY = 0)
